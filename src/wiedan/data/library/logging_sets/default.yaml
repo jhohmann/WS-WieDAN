@@ -1,0 +1,9 @@
+﻿label: Standardlogging
+signals:
+  - type: bender_iso685
+    datapoints: [insulation_resistance]
+    interval_ms: 5000
+  - type: nidec_m700
+    datapoints: [motor_temperature]
+    interval_ms: 5000
+

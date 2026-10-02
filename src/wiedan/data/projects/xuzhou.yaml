@@ -1,0 +1,414 @@
+﻿schema_version: 1
+id: xuzhou
+name: Xuzhou, CN
+
+# Klartext, projektspezifisch. Werte eintragen.
+credentials:
+  client: {user: , password: }
+
+central:
+  devices:
+    iso_ups1:
+      label: Isometer UPS1
+      type: bender_iso685
+      pingable: true
+      connection: {protocol: modbus_tcp, ip: 192.168.196.14, port: 502, unit_id: 1}
+    iso_ups2:
+      label: Isometer UPS2
+      type: bender_iso685
+      pingable: true
+      connection: {protocol: modbus_tcp, ip: 192.168.196.229, port: 502, unit_id: 1}
+    iso_dos1:
+      label: Isometer DOS1
+      type: bender_iso685
+      pingable: true
+      connection: {protocol: modbus_tcp, ip: 192.168.197.14, port: 502, unit_id: 1}
+    iso_dos2:
+      label: Isometer DOS2
+      type: bender_iso685
+      pingable: true
+      connection: {protocol: modbus_tcp, ip: 192.168.197.229, port: 502, unit_id: 1}
+
+vehicles:
+  fzg_01:
+    label: Fzg 01
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.22, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.20}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.20, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.21, port: 22, credentials: client}
+  fzg_02:
+    label: Fzg 02
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.27, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.25}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.25, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.26, port: 22, credentials: client}
+  fzg_03:
+    label: Fzg 03
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.32, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.30}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.30, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.31, port: 22, credentials: client}
+  fzg_04:
+    label: Fzg 04
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.37, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.35}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.35, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.36, port: 22, credentials: client}
+  fzg_05:
+    label: Fzg 05
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.42, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.40}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.40, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.41, port: 22, credentials: client}
+  fzg_06:
+    label: Fzg 06
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.47, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.45}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.45, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.46, port: 22, credentials: client}
+  fzg_07:
+    label: Fzg 07
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.52, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.50}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.50, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.51, port: 22, credentials: client}
+  fzg_08:
+    label: Fzg 08
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.57, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.55}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.55, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.56, port: 22, credentials: client}
+  fzg_09:
+    label: Fzg 09
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.62, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.60}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.60, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.61, port: 22, credentials: client}
+  fzg_10:
+    label: Fzg 10
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.67, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.65}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.65, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.66, port: 22, credentials: client}
+  fzg_11:
+    label: Fzg 11
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.72, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.70}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.70, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.71, port: 22, credentials: client}
+  fzg_12:
+    label: Fzg 12
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.77, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.75}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.75, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.76, port: 22, credentials: client}
+  fzg_13:
+    label: Fzg 13
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.82, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.80}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.80, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.81, port: 22, credentials: client}
+  fzg_14:
+    label: Fzg 14
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.87, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.85}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.85, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.86, port: 22, credentials: client}
+  fzg_15:
+    label: Fzg 15
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.92, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.90}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.90, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.91, port: 22, credentials: client}
+  fzg_16:
+    label: Fzg 16
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.97, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.95}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.95, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.96, port: 22, credentials: client}
+  fzg_17:
+    label: Fzg 17
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.102, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.100}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.100, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.101, port: 22, credentials: client}
+  fzg_18:
+    label: Fzg 18
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.107, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.105}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.105, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.106, port: 22, credentials: client}
+  fzg_19:
+    label: Fzg 19
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.112, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.110}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.110, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.111, port: 22, credentials: client}
+  fzg_20:
+    label: Fzg 20
+    devices:
+      inverter:
+        label: FU
+        type: nidec_m700
+        pingable: true
+        connection: {protocol: modbus_tcp, ip: 192.168.196.117, port: 502, unit_id: 0}
+      plc:
+        label: SPS
+        type: himatrix_f35
+        pingable: true
+        connection: {protocol: icmp, ip: 192.168.196.115}
+        commissioning_connection: {protocol: modbus_tcp, ip: 192.168.196.115, port: 502, unit_id: 0}
+      client:
+        label: WLAN-Client
+        type: siemens_scalance_w700
+        pingable: true
+        connection: {protocol: ssh, ip: 192.168.196.116, port: 22, credentials: client}
+
+
