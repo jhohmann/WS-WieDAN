@@ -1,0 +1,29 @@
+device_type:
+  id: bender_iso685
+  label: Bender iso685D
+  pingable: true
+  connection: {protocol: modbus_tcp, port: 502, unit_id: 1}
+
+  datapoints:
+  
+    insulation_resistance:
+      label: Isolationswiderstand
+      unit: ohm
+      datatype: float32
+      register:
+        area: holding
+        address: 0x1011
+        count: 2
+      scale: 1.0
+      default_interval_ms: 1000
+
+    alarm_state:
+      label: Alarmzustand
+      unit: ""
+      datatype: uint16
+      register:
+        area: holding
+        address: 0x1012
+        count: 1
+      scale: 1.0
+      default_interval_ms: 1000

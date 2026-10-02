@@ -1,0 +1,8 @@
+device_type:
+  id: himatrix_f35
+  label: SPS HIMatrix F35
+  pingable: true
+  connection: {protocol: icmp}
+  commissioning_connection: {protocol: modbus_tcp, port: 502, unit_id: 0}
+
+  datapoints: {}

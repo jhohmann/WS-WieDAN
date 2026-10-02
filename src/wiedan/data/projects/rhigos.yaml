@@ -1,18 +1,31 @@
 schema_version: 1
-id: xuzhou
-name: Xuzhou, CN
+id: rhigos
+name: Rhigos
 
-# Klartext, projektspezifisch. Werte eintragen.
+# Klartext, projektspezifisch.
 credentials:
-  client: {user: , password: }
+  client: {user: admin, password: ARI-7416}
 
-# Pro Gerät nur: type + ip (optional label, pingable). Rest steht in library/device_types/.
 central:
   devices:
-    iso_ups1: {type: bender_iso685, ip: 192.168.196.14, label: Isometer UPS1}
-    iso_ups2: {type: bender_iso685, ip: 192.168.196.229, label: Isometer UPS2}
-    iso_dos1: {type: bender_iso685, ip: 192.168.197.14, label: Isometer DOS1}
-    iso_dos2: {type: bender_iso685, ip: 192.168.197.229, label: Isometer DOS2}
+    iso_track2: {type: bender_iso685, ip: 192.168.196.17, label: Isometer Track 2}
+    iso_track1: {type: bender_iso685, ip: 192.168.196.19, label: Isometer Track 1}
+    ap01: {type: siemens_scalance_w700, ip: 192.168.196.230, label: AP01}
+    ap02: {type: siemens_scalance_w700, ip: 192.168.196.231, label: AP02}
+    ap03: {type: siemens_scalance_w700, ip: 192.168.196.232, label: AP03}
+    ap04: {type: siemens_scalance_w700, ip: 192.168.196.233, label: AP04}
+    ap05: {type: siemens_scalance_w700, ip: 192.168.196.234, label: AP05}
+    ap06: {type: siemens_scalance_w700, ip: 192.168.196.235, label: AP06}
+    ap07: {type: siemens_scalance_w700, ip: 192.168.196.236, label: AP07}
+    ap08: {type: siemens_scalance_w700, ip: 192.168.196.237, label: AP08}
+    ap09: {type: siemens_scalance_w700, ip: 192.168.196.238, label: AP09}
+    ap10: {type: siemens_scalance_w700, ip: 192.168.196.239, label: AP10}
+    ap11: {type: siemens_scalance_w700, ip: 192.168.196.240, label: AP11}
+    ap12: {type: siemens_scalance_w700, ip: 192.168.196.241, label: AP12}
+    ap13: {type: siemens_scalance_w700, ip: 192.168.196.242, label: AP13}
+    ap14: {type: siemens_scalance_w700, ip: 192.168.196.243, label: AP14}
+    ap15: {type: siemens_scalance_w700, ip: 192.168.196.244, label: AP15}
+    ap16: {type: siemens_scalance_w700, ip: 192.168.196.245, label: AP16}
 
 vehicles:
   fzg_01:
@@ -99,39 +112,3 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.87}
       plc: {type: himatrix_f35, ip: 192.168.196.85}
       client: {type: siemens_scalance_w700, ip: 192.168.196.86}
-  fzg_15:
-    label: Fzg 15
-    devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.92}
-      plc: {type: himatrix_f35, ip: 192.168.196.90}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.91}
-  fzg_16:
-    label: Fzg 16
-    devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.97}
-      plc: {type: himatrix_f35, ip: 192.168.196.95}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.96}
-  fzg_17:
-    label: Fzg 17
-    devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.102}
-      plc: {type: himatrix_f35, ip: 192.168.196.100}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.101}
-  fzg_18:
-    label: Fzg 18
-    devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.107}
-      plc: {type: himatrix_f35, ip: 192.168.196.105}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.106}
-  fzg_19:
-    label: Fzg 19
-    devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.112}
-      plc: {type: himatrix_f35, ip: 192.168.196.110}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.111}
-  fzg_20:
-    label: Fzg 20
-    devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.117}
-      plc: {type: himatrix_f35, ip: 192.168.196.115}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.116}

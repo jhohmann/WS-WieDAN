@@ -78,6 +78,7 @@ Target layout (grows iteratively, create folders only when needed):
 - Features are started from a launcher. How features register is not decided yet; do not invent one.
 - Results are stored as files per run with metadata, not in GUI state.
 - Small steps; each feature usable on its own as CLI before GUI.
+- File changes only via editor tools (edit/create) so the user sees Keep/Undo in VS Code. Shell only for running commands (pytest, pip). Writing files via shell only if the user explicitly allows it.
 
 ---
 

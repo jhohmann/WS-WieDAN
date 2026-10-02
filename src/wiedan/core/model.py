@@ -33,22 +33,37 @@ class Project:
         ]
 
 
+def _data(*parts: str):
+    path = files("wiedan") / "data"
+    for part in parts:
+        path = path / part
+    return path
+
+
+def _read_yaml(*parts: str) -> dict:
+    return yaml.safe_load(_data(*parts).read_text(encoding="utf-8"))
+
+
 def list_projects() -> list[str]:
-    folder = files("wiedan") / "data" / "projects"
-    return sorted(p.name[:-5] for p in folder.iterdir() if p.name.endswith(".yaml"))
+    return sorted(p.name[:-5] for p in _data("projects").iterdir() if p.name.endswith(".yaml"))
 
 
 def load_project(project_id: str) -> Project:
-    text = (files("wiedan") / "data" / "projects" / f"{project_id}.yaml").read_text(encoding="utf-8")
-    raw = yaml.safe_load(text)
+    raw = _read_yaml("projects", f"{project_id}.yaml")
     devices = {}
 
     def add(vehicle, name, d):
         dev_id = f"{vehicle or 'central'}/{name}"
+        t = _read_yaml("library", "device_types", f"{d['type']}.yaml")["device_type"]
+        comm = t.get("commissioning_connection")
         devices[dev_id] = Device(
-            id=dev_id, vehicle=vehicle, label=d["label"], type=d["type"],
-            pingable=d["pingable"], connection=d["connection"],
-            commissioning_connection=d.get("commissioning_connection"),
+            id=dev_id,
+            vehicle=vehicle,
+            label=d.get("label", t["label"]),
+            type=d["type"],
+            pingable=d.get("pingable", t["pingable"]),
+            connection={**t["connection"], "ip": d["ip"]},
+            commissioning_connection={**comm, "ip": d["ip"]} if comm else None,
         )
 
     for name, d in raw["central"]["devices"].items():

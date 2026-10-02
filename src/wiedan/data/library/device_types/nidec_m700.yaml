@@ -1,0 +1,30 @@
+device_type:
+  id: nidec_m700
+  label: Nidec Unidrive M700
+  pingable: true
+  connection: {protocol: modbus_tcp, port: 502, unit_id: 0}
+
+  datapoints:
+
+    dc_link_voltage:
+      label: Zwischenkreisspannung
+      unit: V
+      datatype: uint16
+      register:
+        area: holding
+        address: 102
+        count: 1
+      scale: 1.0
+      default_interval_ms: 1000
+
+    motor_temperature:
+      label: Motortemperatur
+      unit: °C
+      datatype: int16
+      register:
+        area: holding
+        address: 4874
+        count: 1
+      scale: 1.0
+      default_interval_ms: 1000
+
