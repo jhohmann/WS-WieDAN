@@ -1,4 +1,4 @@
-﻿label: Standardlogging
+label: Standardlogging
 signals:
   - type: bender_iso685
     datapoints: [insulation_resistance]

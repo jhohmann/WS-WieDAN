@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+*.spec.bak
+.pytest_cache/
+.ruff_cache/
+.vscode/
+.idea/
+*.log
+.env
+# Laufzeitdaten (Aufnahmen/Ergebnisse) gehören nicht ins Repo
+runs/
+recordings/

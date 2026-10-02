@@ -1,4 +1,4 @@
-﻿label: Temperaturdiagnose
+label: Temperaturdiagnose
 signals:
   - type: nidec_m700
     datapoints: [motor_temperature]

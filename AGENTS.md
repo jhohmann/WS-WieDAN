@@ -1,4 +1,4 @@
-﻿ # CLAUDE.md — Stateless AI Production Pipeline Template
+ # CLAUDE.md — Stateless AI Production Pipeline Template
 
 ## User Context (fill this out manually — human)
 

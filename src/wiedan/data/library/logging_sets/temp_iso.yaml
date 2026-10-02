@@ -1,4 +1,4 @@
-﻿label: Temperaturdiagnose + Isolationswiderstand
+label: Temperaturdiagnose + Isolationswiderstand
 signals:
   - type: bender_iso685
     datapoints: [insulation_resistance]
