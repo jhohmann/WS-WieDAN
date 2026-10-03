@@ -10,3 +10,5 @@ def test_xuzhou():
     assert len(p.find(vehicle="fzg_03")) == 3
     assert p.devices["fzg_03/inverter"].connection["ip"] == "192.168.196.32"
     assert p.devices["fzg_03/plc"].commissioning_connection["protocol"] == "modbus_tcp"
+    assert p.live
+    assert p.vehicles["fzg_03"] == "Fzg 03"

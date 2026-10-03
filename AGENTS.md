@@ -53,9 +53,10 @@ If any other file contradicts `STATUS.md`, trust `STATUS.md`.
 
 Target layout (grows iteratively, create folders only when needed):
 
-- `/src/wiedan/core/` model, comm (one driver per protocol), store, jobs
-- `/src/wiedan/features/` one package per feature area
-- `/src/wiedan/apps/` launcher + thin GUI entry points, no logic
+- `/src/wiedan/core/` model, comm (one driver per protocol), store, jobs, settings
+- `/src/wiedan/ui/` shared GUI building blocks (theme, icons); no project logic
+- `/src/wiedan/features/` one module/package per feature area
+- `/src/wiedan/apps/` main window + thin GUI entry points, no logic
 - `/src/wiedan/data/` read-only, shipped inside the .exe (PyInstaller `--add-data`):
   - `projects/<id>.yaml` master data per project (central + vehicles hierarchy)
   - `library/` project-independent: device types, logging sets
@@ -68,14 +69,18 @@ Target layout (grows iteratively, create folders only when needed):
 ## RULES
 (fill this out manually)
 
-- Dependency direction: apps -> features -> core. Never backwards. Core has no GUI imports.
+- The agent's responsibility is to preserve a clean codebase and sound development practices, using relevant best practices and modern usability principles.
+- Architect role: prioritize understandable code and sound structures that support the overall project goal.
+- For UI/UX design, use current, modern best practices.
+- Do not predict or invent dashboard content or tool functionality unless asked. Functionality requirements come from the user.
+- Dependency direction: apps -> features -> ui -> core. Never backwards. Core has no GUI imports.
 - One master data set. Features reference devices by ID, never copy IP/names.
 - A device has exactly one fixed communication type; changing it means creating a new device.
 - New protocol = new driver behind the common interface; no changes to features.
 - Master data is entered manually and assumed correct and immutable: no validation layer, no Pydantic. Schema version in file.
 - Credentials are project-specific, stored in plain text in the project file under `credentials:` (decided). Never invent values; keep that file out of public repos.
 - GUI is PySide6. Long tasks run as jobs (uniform status/cancel/result), never blocking the GUI thread.
-- Features are started from a launcher. How features register is not decided yet; do not invent one.
+- One main window (VS Code style): header with active project, activity bar (modes), sidebar, tabbed main area, status bar. Details in STATUS.md. How modes/tools register is not decided yet; do not invent one.
 - Results are stored as files per run with metadata, not in GUI state.
 - Small steps; each feature usable on its own as CLI before GUI.
 - File changes only via editor tools (edit/create) so the user sees Keep/Undo in VS Code. Shell only for running commands (pytest, pip). Writing files via shell only if the user explicitly allows it.
@@ -240,6 +245,7 @@ All worker prompts must be:
 - grounded
 - self-contained
 
+
 ---
 
 # ENVELOPE STRUCTURE
@@ -308,4 +314,3 @@ It is the single source of progress truth.
 
 Each completed execution loop increments the step exactly once.
 - Shipped data is read-only and loaded via one helper (importlib.resources / sys._MEIPASS), never via relative paths. Anything written at runtime (recordings, results, settings) goes to a user folder (e.g. %LOCALAPPDATA%\WieDAN), never into the install/exe folder.
-

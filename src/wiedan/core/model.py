@@ -22,6 +22,8 @@ class Project:
     name: str
     credentials: dict
     devices: dict[str, Device]
+    live: bool  # Live-Betrieb in diesem Projekt realisiert
+    vehicles: dict[str, str]  # Fahrzeug-ID -> Label
 
     def find(self, type=None, vehicle=None, central=None):
         """Geräte filtern. central=True: nur Zentrale, central=False: nur Fahrzeuge."""
@@ -71,4 +73,11 @@ def load_project(project_id: str) -> Project:
     for vid, v in raw["vehicles"].items():
         for name, d in v["devices"].items():
             add(vid, name, d)
-    return Project(raw["id"], raw["name"], raw.get("credentials", {}), devices)
+    return Project(
+        id=raw["id"],
+        name=raw["name"],
+        credentials=raw.get("credentials", {}),
+        devices=devices,
+        live=raw.get("live", False),
+        vehicles={vid: v.get("label", vid) for vid, v in raw["vehicles"].items()},
+    )

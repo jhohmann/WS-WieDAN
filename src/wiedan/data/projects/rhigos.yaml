@@ -1,6 +1,7 @@
 schema_version: 1
 id: rhigos
 name: Rhigos
+live: true
 
 # Klartext, projektspezifisch.
 credentials:

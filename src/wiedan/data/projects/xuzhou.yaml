@@ -1,6 +1,7 @@
 schema_version: 1
 id: xuzhou
 name: Xuzhou, CN
+live: true
 
 # Klartext, projektspezifisch. Werte eintragen.
 credentials:
