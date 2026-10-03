@@ -1,6 +1,7 @@
 device_type:
   id: bender_iso685
   label: Bender iso685D
+  category: insulation_monitor
   pingable: true
   connection: {protocol: modbus_tcp, port: 502, unit_id: 1}
 

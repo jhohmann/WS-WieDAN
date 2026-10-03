@@ -1,0 +1,7 @@
+device_type:
+  id: himatrix_f30
+  label: SPS HIMatrix F30
+  category: plc
+  pingable: true
+  connection: {protocol: icmp}
+  datapoints: {}

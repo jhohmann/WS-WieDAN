@@ -1,7 +1,10 @@
 schema_version: 1
 id: xuzhou
-name: Xuzhou, CN
+name: Xuzhou
+full_name: Xuzhou, CN
 live: true
+control: HIMA
+product: CoasterKart
 
 # Klartext, projektspezifisch. Werte eintragen.
 credentials:
@@ -18,120 +21,140 @@ central:
 vehicles:
   fzg_01:
     label: Fzg 01
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.22}
       plc: {type: himatrix_f35, ip: 192.168.196.20}
       client: {type: siemens_scalance_w700, ip: 192.168.196.21}
   fzg_02:
     label: Fzg 02
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.27}
       plc: {type: himatrix_f35, ip: 192.168.196.25}
       client: {type: siemens_scalance_w700, ip: 192.168.196.26}
   fzg_03:
     label: Fzg 03
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.32}
       plc: {type: himatrix_f35, ip: 192.168.196.30}
       client: {type: siemens_scalance_w700, ip: 192.168.196.31}
   fzg_04:
     label: Fzg 04
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.37}
       plc: {type: himatrix_f35, ip: 192.168.196.35}
       client: {type: siemens_scalance_w700, ip: 192.168.196.36}
   fzg_05:
     label: Fzg 05
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.42}
       plc: {type: himatrix_f35, ip: 192.168.196.40}
       client: {type: siemens_scalance_w700, ip: 192.168.196.41}
   fzg_06:
     label: Fzg 06
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.47}
       plc: {type: himatrix_f35, ip: 192.168.196.45}
       client: {type: siemens_scalance_w700, ip: 192.168.196.46}
   fzg_07:
     label: Fzg 07
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.52}
       plc: {type: himatrix_f35, ip: 192.168.196.50}
       client: {type: siemens_scalance_w700, ip: 192.168.196.51}
   fzg_08:
     label: Fzg 08
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.57}
       plc: {type: himatrix_f35, ip: 192.168.196.55}
       client: {type: siemens_scalance_w700, ip: 192.168.196.56}
   fzg_09:
     label: Fzg 09
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.62}
       plc: {type: himatrix_f35, ip: 192.168.196.60}
       client: {type: siemens_scalance_w700, ip: 192.168.196.61}
   fzg_10:
     label: Fzg 10
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.67}
       plc: {type: himatrix_f35, ip: 192.168.196.65}
       client: {type: siemens_scalance_w700, ip: 192.168.196.66}
   fzg_11:
     label: Fzg 11
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.72}
       plc: {type: himatrix_f35, ip: 192.168.196.70}
       client: {type: siemens_scalance_w700, ip: 192.168.196.71}
   fzg_12:
     label: Fzg 12
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.77}
       plc: {type: himatrix_f35, ip: 192.168.196.75}
       client: {type: siemens_scalance_w700, ip: 192.168.196.76}
   fzg_13:
     label: Fzg 13
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.82}
       plc: {type: himatrix_f35, ip: 192.168.196.80}
       client: {type: siemens_scalance_w700, ip: 192.168.196.81}
   fzg_14:
     label: Fzg 14
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.87}
       plc: {type: himatrix_f35, ip: 192.168.196.85}
       client: {type: siemens_scalance_w700, ip: 192.168.196.86}
   fzg_15:
     label: Fzg 15
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.92}
       plc: {type: himatrix_f35, ip: 192.168.196.90}
       client: {type: siemens_scalance_w700, ip: 192.168.196.91}
   fzg_16:
     label: Fzg 16
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.97}
       plc: {type: himatrix_f35, ip: 192.168.196.95}
       client: {type: siemens_scalance_w700, ip: 192.168.196.96}
   fzg_17:
     label: Fzg 17
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.102}
       plc: {type: himatrix_f35, ip: 192.168.196.100}
       client: {type: siemens_scalance_w700, ip: 192.168.196.101}
   fzg_18:
     label: Fzg 18
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.107}
       plc: {type: himatrix_f35, ip: 192.168.196.105}
       client: {type: siemens_scalance_w700, ip: 192.168.196.106}
   fzg_19:
     label: Fzg 19
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.112}
       plc: {type: himatrix_f35, ip: 192.168.196.110}
       client: {type: siemens_scalance_w700, ip: 192.168.196.111}
   fzg_20:
     label: Fzg 20
+    state: operational
     devices:
       inverter: {type: nidec_m700, ip: 192.168.196.117}
       plc: {type: himatrix_f35, ip: 192.168.196.115}

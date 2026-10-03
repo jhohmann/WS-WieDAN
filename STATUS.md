@@ -18,6 +18,7 @@ Stammdaten-Basis und Hauptfenster-Gerüst (Modus Live mit Explorer, Farbstile) f
 - Repo: AGENTS.md, STATUS.md, pyproject.toml, src/wiedan (core/model.py, data/), tests/. 1 Test grün.
 - Hauptfenster steht (apps/main_window.py, Start: `wiedan`): Kopfzeile mit Projekt- und Farbstil-Wahl, Activity Bar mit Icons (Live, Inbetriebnahme, Plotter), Seitenleiste, Tab-Bereich, Statusleiste. Live: Projekt-Explorer (Baum, Icons, Doppelklick = Geräte-Tab, Platzhalterinhalt). Inbetriebnahme und Plotter nur Platzhalter. Farbstile hell (Standard), dunkel, pastell (Debug, jeder Bereich andere Farbe), gespeichert in %LOCALAPPDATA%\WieDAN\settings.json. Beide Projekte `live: true`. 3 Tests grün.
 - Offen im Explorer: Farbe = Erreichbarkeit (Icons sind vorerst grau).
+- Stammdaten-Hierarchie: Projekt (`control: HIMA`, `product: CoasterKart|WieFlyer|Bobkart`, pro Fahrzeug überschreibbar) -> Fahrzeuge -> Geräte. Gerätetypen haben `category` (inverter, plc, comms, io). Icons: Fahrzeug nach Produkttyp (`ui/svg/<produkt>.svg`), Gerät nach Kategorie, Ersatz `vehicle` bzw. `device`. Projekt-Icon: Riesenrad.
 - Gerätetypen mit Datenpunkten: nidec_m700, bender_iso685. himatrix_f35 und siemens_scalance_w700 ohne Datenpunkte.
 
 ---

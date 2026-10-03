@@ -1,0 +1,35 @@
+schema_version: 1
+id: testbahn
+name: Testbahn
+full_name: CoasterKart Testbahn, Rasodorf, DE
+live: true
+control: HIMA
+product: CoasterKart
+
+# Klartext, projektspezifisch.
+credentials:
+  client: {user: admin, password: ARI-7568}
+
+central:
+  devices:
+    plc: {type: himatrix_f30, ip: 192.168.196.5, label: Zentral-SPS}
+    iso_track: {type: bender_iso685, ip: 192.168.196.19, label: Isometer Track 2}
+    ap01: {type: siemens_scalance_w700, ip: 192.168.196.230, label: AP01}
+    ap02: {type: siemens_scalance_w700, ip: 192.168.196.231, label: AP02}
+
+vehicles:
+  fzg_01:
+    label: Fzg 01
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.22}
+      plc: {type: himatrix_f35, ip: 192.168.196.20}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.21}
+  fzg_02:
+    label: Fzg 02
+    state: unavailable
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.27}
+      plc: {type: himatrix_f35, ip: 192.168.196.25}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.26}
+  

@@ -1,6 +1,7 @@
 device_type:
   id: nidec_m700
   label: Nidec Unidrive M700
+  category: inverter
   pingable: true
   connection: {protocol: modbus_tcp, port: 502, unit_id: 0}
 

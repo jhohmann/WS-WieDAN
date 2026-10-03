@@ -1,6 +1,7 @@
 device_type:
   id: siemens_scalance_w700
   label: WLAN-Client Scalance W700
+  category: comms
   pingable: true
   connection: {protocol: ssh, port: 22, credentials: client}
 

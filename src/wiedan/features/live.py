@@ -1,17 +1,43 @@
 """Modus Live: Projekt-Explorer (Seitenleiste) und Geräte-Tabs (Hauptfenster)."""
-from PySide6.QtCore import Qt, Signal
+import subprocess
+
+from PySide6.QtCore import QObject, QRunnable, QThreadPool, Qt, Signal, Slot
 from PySide6.QtWidgets import QLabel, QTabWidget, QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget
 
 from wiedan.core.model import Device, Project
-from wiedan.ui.icons import icon
+from wiedan.core.ping import ping_devices
+from wiedan.ui.icons import icon, pick
 
 DEVICE_ROLE = Qt.ItemDataRole.UserRole
+
+
+class _ReachabilitySignals(QObject):
+    finished = Signal(int, object, object)
+
+
+class _ReachabilityTask(QRunnable):
+    def __init__(self, generation: int, addresses: dict[str, str]):
+        super().__init__()
+        self.setAutoDelete(False)
+        self.generation = generation
+        self.addresses = addresses
+        self.signals = _ReachabilitySignals()
+
+    def run(self):
+        try:
+            results = ping_devices(self.addresses)
+        except (OSError, subprocess.SubprocessError) as exc:
+            self.signals.finished.emit(self.generation, None, str(exc))
+        else:
+            self.signals.finished.emit(self.generation, results, None)
 
 
 class ProjectExplorer(QTreeWidget):
     """Baum Zentrale/Fahrzeuge/Geräte. Doppelklick auf ein Gerät meldet seine ID."""
 
     device_opened = Signal(str)
+    reachability_check_started = Signal()
+    reachability_check_finished = Signal(object, object)
 
     def __init__(self):
         super().__init__()
@@ -20,15 +46,59 @@ class ProjectExplorer(QTreeWidget):
         self.itemDoubleClicked.connect(self._on_double_click)
         self._project: Project | None = None
         self._color = "#6e6e6e"
+        self._reachable_color = "#218838"
+        self._unreachable_color = "#c62828"
+        self._reachability: dict[str, bool] = {}
+        self._reachability_task: _ReachabilityTask | None = None
+        self._project_generation = 0
 
-    def set_project(self, project: Project, color: str):
+    def set_project(self, project: Project):
+        self._project_generation += 1
         self._project = project
-        self._color = color
+        self._reachability.clear()
         self._rebuild()
 
-    def set_color(self, color: str):
-        self._color = color
+    def set_status_colors(self, neutral: str, reachable: str, unreachable: str):
+        self._color = neutral
+        self._reachable_color = reachable
+        self._unreachable_color = unreachable
         self._rebuild()
+
+    @property
+    def reachability_check_running(self) -> bool:
+        return self._reachability_task is not None
+
+    def check_reachability(self):
+        if self._project is None or self._reachability_task is not None:
+            return
+        addresses = {
+            device.id: device.connection["ip"]
+            for device in self._project.devices.values()
+            if device.pingable
+        }
+        if not addresses:
+            return
+
+        generation = self._project_generation
+        task = _ReachabilityTask(generation, addresses)
+        self._reachability_task = task
+        task.signals.finished.connect(self._on_reachability_finished)
+        self._reachability.clear()
+        self._rebuild()
+        self.reachability_check_started.emit()
+        QThreadPool.globalInstance().start(task)
+
+    @Slot(int, object, object)
+    def _on_reachability_finished(self, generation: int, results, error):
+        self._reachability_task = None
+        is_current_project = generation == self._project_generation
+        if is_current_project and error is None:
+            self._reachability = results
+            self._rebuild()
+        self.reachability_check_finished.emit(
+            results if is_current_project else None,
+            error if is_current_project else None,
+        )
 
     def _rebuild(self):
         self.clear()
@@ -36,11 +106,18 @@ class ProjectExplorer(QTreeWidget):
             return
         groups = {None: self._group("Zentrale", "central")}
         for vid, label in self._project.vehicles.items():
-            groups[vid] = self._group(label, "vehicle")
+            groups[vid] = self._group(label, pick(self._project.vehicle_products[vid], "vehicle"))
         for device in self._project.devices.values():
             item = QTreeWidgetItem(groups[device.vehicle], [device.label])
-            item.setIcon(0, icon("device", self._color))
+            status = self._reachability.get(device.id)
+            color = (
+                self._reachable_color if status is True
+                else self._unreachable_color if status is False
+                else self._color
+            )
+            item.setIcon(0, icon(pick(device.category, "device"), color))
             item.setData(0, DEVICE_ROLE, device.id)
+
     def _group(self, label: str, icon_name: str) -> QTreeWidgetItem:
         item = QTreeWidgetItem(self, [label])
         item.setIcon(0, icon(icon_name, self._color))

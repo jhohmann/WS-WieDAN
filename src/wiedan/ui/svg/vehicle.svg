@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 320 240" fill="none">
+<title>CoasterKart</title>
+<g stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M246 154V73h22l20 71-8 20"/>
+<path d="M157 146h37c12 0 20-8 24-21l23-78"/>
+<path d="M233 83l-28 11c-7 3-10 8-12 15l-7 17h-30"/>
+<path d="M32 129l84-17 12 50h111l-18 24H104l-30-36H32Z"/>
+<path d="M103 158l125-25 28-52"/>
+<circle cx="72" cy="176" r="27"/>
+<circle cx="253" cy="176" r="27"/>
+<circle cx="72" cy="176" r="8"/>
+<circle cx="253" cy="176" r="8"/>
+</g>
+</svg>
