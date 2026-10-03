@@ -17,7 +17,7 @@ def window(tmp_path, monkeypatch):
 
 
 def test_explorer_and_tabs(window):
-    window.project_box.setCurrentText("xuzhou")
+    window.set_project("xuzhou")
     assert window.explorer.topLevelItemCount() == 21  # Zentrale + 20 Fahrzeuge
     window.live_area.open_device(window._project.devices["fzg_03/inverter"])
     window.live_area.open_device(window._project.devices["fzg_03/inverter"])
@@ -25,5 +25,5 @@ def test_explorer_and_tabs(window):
 
 
 def test_theme_switch_is_saved(window, tmp_path):
-    window.theme_box.setCurrentIndex(window.theme_box.findData("dunkel"))
+    window.set_theme("pastell")
     assert (tmp_path / "WieDAN" / "settings.json").exists()

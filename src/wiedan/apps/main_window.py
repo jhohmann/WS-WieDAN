@@ -2,8 +2,9 @@
 import sys
 
 from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QActionGroup
 from PySide6.QtWidgets import (
-    QApplication, QButtonGroup, QComboBox, QFrame, QHBoxLayout, QLabel, QMainWindow,
+    QApplication, QButtonGroup, QFrame, QHBoxLayout, QLabel, QMainWindow, QMenu,
     QSplitter, QStackedWidget, QToolButton, QVBoxLayout, QWidget,
 )
 
@@ -51,33 +52,54 @@ class MainWindow(QMainWindow):
         self.content.addWidget(_placeholder("Inbetriebnahme folgt"))
         self.content.addWidget(_placeholder("Plotter folgt"))
 
-        self.project_box = QComboBox()
-        self.project_box.addItems(list_projects())
-        self.theme_box = QComboBox()
+        self.project_button = QToolButton()
+        self.project_button.setObjectName("projectbutton")
+        self.project_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+        self.project_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        self.project_menu = QMenu(self.project_button)
+        self.project_button.setMenu(self.project_menu)
+        for project_id in list_projects():
+            info = load_project(project_id)
+            suffix = "Live" if info.live else "nicht live"
+            action = self.project_menu.addAction(
+                f"{info.name}   ·   {len(info.vehicles)} Fahrzeuge   ·   {suffix}"
+            )
+            action.triggered.connect(lambda _checked=False, pid=project_id: self.set_project(pid))
+
+        self.settings_button = QToolButton()
+        self.settings_button.setObjectName("settingsbutton")
+        self.settings_button.setToolTip("Einstellungen")
+        self.settings_button.setIconSize(QSize(24, 24))
+        self.settings_button.setFixedSize(48, 44)
+        self.settings_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+        self.settings_menu = QMenu(self.settings_button)
+        self.settings_button.setMenu(self.settings_menu)
+        self.theme_actions = {}
+        theme_group = QActionGroup(self)
         for key, colors in THEMES.items():
-            self.theme_box.addItem(colors["label"], key)
+            action = self.settings_menu.addAction(colors["label"])
+            action.setCheckable(True)
+            theme_group.addAction(action)
+            action.triggered.connect(lambda _checked=False, k=key: self.set_theme(k))
+            self.theme_actions[key] = action
 
         self.mode_buttons: list[QToolButton] = []
         self.setCentralWidget(self._build_layout())
         self.statusBar().showMessage("Bereit")
 
         theme = self._settings.get("theme", DEFAULT_THEME)
-        self.theme_box.setCurrentIndex(max(self.theme_box.findData(theme), 0))
-        self.theme_box.currentIndexChanged.connect(self._on_theme_changed)
-        self.project_box.currentTextChanged.connect(self._load_project)
+        self._theme = theme if theme in THEMES else DEFAULT_THEME
+        self.theme_actions[self._theme].setChecked(True)
         self._apply_theme()
-        self._load_project(self.project_box.currentText())
+        self.set_project(list_projects()[0])
 
     def _build_layout(self) -> QWidget:
         header = QFrame()
         header.setObjectName("header")
         header_layout = QHBoxLayout(header)
-        header_layout.setContentsMargins(12, 6, 12, 6)
-        header_layout.addWidget(QLabel("Projekt"))
-        header_layout.addWidget(self.project_box)
+        header_layout.setContentsMargins(12, 4, 12, 4)
+        header_layout.addWidget(self.project_button)
         header_layout.addStretch()
-        header_layout.addWidget(QLabel("Farbstil"))
-        header_layout.addWidget(self.theme_box)
 
         activity = QFrame()
         activity.setObjectName("activitybar")
@@ -96,6 +118,7 @@ class MainWindow(QMainWindow):
             activity_layout.addWidget(button)
             self.mode_buttons.append(button)
         activity_layout.addStretch()
+        activity_layout.addWidget(self.settings_button)
         group.idClicked.connect(self._set_mode)
         self.mode_buttons[0].setChecked(True)
 
@@ -135,22 +158,27 @@ class MainWindow(QMainWindow):
         self.sidebar.setCurrentIndex(index)
         self.content.setCurrentIndex(index)
 
-    def _on_theme_changed(self):
-        self._settings["theme"] = self.theme_box.currentData()
+    def set_theme(self, key: str):
+        self._theme = key
+        self.theme_actions[key].setChecked(True)
+        self._settings["theme"] = key
         save_settings(self._settings)
         self._apply_theme()
 
     def _apply_theme(self):
-        colors = THEMES[self.theme_box.currentData()]
+        colors = THEMES[self._theme]
         QApplication.instance().setStyleSheet(stylesheet(colors))
         for button, (_key, _name, icon_name) in zip(self.mode_buttons, MODES):
             button.setIcon(icon(icon_name, colors["muted"], colors["accent"]))
+        self.settings_button.setIcon(icon("settings", colors["muted"]))
+        self.project_button.setIcon(icon("vehicle", colors["muted"]))
         self.explorer.set_color(colors["muted"])
 
-    def _load_project(self, project_id: str):
+    def set_project(self, project_id: str):
         self._project = load_project(project_id)
+        self.project_button.setText(f" {self._project.name}  ▾")
         self.live_area.close_all()
-        self.explorer.set_project(self._project, THEMES[self.theme_box.currentData()]["muted"])
+        self.explorer.set_project(self._project, THEMES[self._theme]["muted"])
         live_button = self.mode_buttons[0]
         live_button.setEnabled(self._project.live)
         live_button.setToolTip("Live" if self._project.live else "Live: für dieses Projekt nicht verfügbar")

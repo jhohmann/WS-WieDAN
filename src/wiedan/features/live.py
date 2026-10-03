@@ -41,8 +41,6 @@ class ProjectExplorer(QTreeWidget):
             item = QTreeWidgetItem(groups[device.vehicle], [device.label])
             item.setIcon(0, icon("device", self._color))
             item.setData(0, DEVICE_ROLE, device.id)
-        self.expandToDepth(0)
-
     def _group(self, label: str, icon_name: str) -> QTreeWidgetItem:
         item = QTreeWidgetItem(self, [label])
         item.setIcon(0, icon(icon_name, self._color))
