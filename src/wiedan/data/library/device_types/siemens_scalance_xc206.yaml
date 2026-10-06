@@ -1,0 +1,8 @@
+device_type:
+  id: siemens_scalance_xc206
+  label: Switch Scalance XC-206
+  category: comms
+  pingable: true
+  connection: {protocol: ssh, port: 22, credentials: client}
+
+  datapoints: {}

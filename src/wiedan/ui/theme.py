@@ -7,7 +7,7 @@ THEMES = {
         "header": "#f3f3f3", "surface": "#dcdcdc", "activity": "#ececec", "sidebar": "#f7f7f7",
         "main": "#ffffff",         "status": "#1b5e3a", "status_text": "#ffffff",
                 "text": "#1f1f1f", "muted": "#6e6e6e", "accent": "#1b5e3a",
-        "reachable": "#218838", "unreachable": "#c62828",
+        "reachable": "#5a9a6a", "unreachable": "#b86a6a",
                 "selection": "#d5eadd", "hover": "#e0e0e0", "border": "#d4d4d4",
         "tab": "#ececec",
     },
@@ -16,7 +16,7 @@ THEMES = {
         "header": "#323233", "surface": "#181818", "activity": "#333333", "sidebar": "#252526",
         "main": "#1e1e1e",         "status": "#1b5e3a", "status_text": "#ffffff",
                 "text": "#cccccc", "muted": "#858585", "accent": "#3fa56b",
-        "reachable": "#4ec982", "unreachable": "#f47067",
+        "reachable": "#6fae85", "unreachable": "#c98480",
                 "selection": "#1f4a33", "hover": "#2a2d2e", "border": "#3c3c3c",
         "tab": "#2d2d2d",
     },
@@ -25,7 +25,7 @@ THEMES = {
         "header": "#cfe8fc", "surface": "#f0f0f0", "activity": "#e3d5f5", "sidebar": "#d5f5e3",
         "main": "#fdebd0", "status": "#fcf3cf", "status_text": "#333333",
         "text": "#2b2b2b", "muted": "#6b6b6b", "accent": "#2b2b2b",
-        "reachable": "#2e7d32", "unreachable": "#c62828",
+        "reachable": "#5f9a6b", "unreachable": "#b87472",
         "selection": "#ffd6e0", "hover": "#f5c6d6", "border": "#b0b0b0",
         "tab": "#fad7a0",
     },
@@ -68,11 +68,11 @@ def stylesheet(c: dict) -> str:
     }}
     QStatusBar {{ background: {c['status']}; color: {c['status_text']}; }}
     QStatusBar QLabel {{ color: {c['status_text']}; }}
-    #projectbutton {{
+    QStatusBar QToolButton {{
         background: transparent; border: none; border-radius: 3px;
         padding: 2px 10px; font-weight: 600; color: {c['status_text']};
     }}
-    #projectbutton:hover {{ background: rgba(255, 255, 255, 40); }}
+    QStatusBar QToolButton:hover {{ background: rgba(255, 255, 255, 40); }}
     #settingsbutton:hover {{ background: {c['hover']}; }}
     #projectbutton::menu-indicator, #settingsbutton::menu-indicator {{ image: none; width: 0; }}
     #settingsbutton {{ background: transparent; border: none; }}
@@ -90,6 +90,8 @@ def stylesheet(c: dict) -> str:
         background: {c['main']}; border: 1px solid {c['border']}; padding: 4px;
     }}
     QMenu::item {{ padding: 6px 24px 6px 12px; border-radius: 3px; }}
+    QMenu::item:disabled {{ color: {c['muted']}; }}
+    QMenu::item:disabled:selected {{ color: {c['muted']}; background: transparent; }}
     QMenu::item:selected {{ background: {c['selection']}; color: {c['text']}; }}
     QMenu::indicator:checked {{ background: {c['accent']}; border-radius: 3px; }}
     QSplitter::handle {{ background: transparent; }}

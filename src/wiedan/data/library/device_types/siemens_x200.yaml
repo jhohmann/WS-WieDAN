@@ -1,0 +1,7 @@
+device_type:
+  id: siemens_x200
+  label: Switch Siemens SCALANCE X200
+  category: comms
+  pingable: true
+  connection: {protocol: icmp}
+  datapoints: {}

@@ -1,0 +1,7 @@
+device_type:
+  id: turck_tben_s1_8dxp
+  label: IO-Extender Turck TBEN S1 8DXP
+  category: io
+  pingable: true
+  connection: {protocol: icmp}
+  datapoints: {}

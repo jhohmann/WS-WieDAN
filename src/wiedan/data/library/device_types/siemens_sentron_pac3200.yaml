@@ -1,0 +1,7 @@
+device_type:
+  id: siemens_sentron_pac3200
+  label: Energiemesser Siemens SENTRON PAC3200
+  category: device
+  pingable: true
+  connection: {protocol: icmp}
+  datapoints: {}

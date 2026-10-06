@@ -1,0 +1,7 @@
+device_type:
+  id: beckhoff_kl
+  label: Feldbusadapter Beckhoff KL
+  category: io
+  pingable: true
+  connection: {protocol: icmp}
+  datapoints: {}

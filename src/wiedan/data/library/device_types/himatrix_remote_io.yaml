@@ -1,0 +1,7 @@
+device_type:
+  id: himatrix_remote_io
+  label: Remote-I/O HIMatrix
+  category: io
+  pingable: true
+  connection: {protocol: icmp}
+  datapoints: {}

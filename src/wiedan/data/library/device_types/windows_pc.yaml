@@ -1,0 +1,7 @@
+device_type:
+  id: windows_pc
+  label: Windows-PC
+  category: device
+  pingable: true
+  connection: {protocol: icmp}
+  datapoints: {}

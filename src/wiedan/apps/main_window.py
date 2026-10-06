@@ -1,4 +1,5 @@
 """Hauptfenster: Kopfzeile, Activity Bar, Seitenleiste, Hauptbereich, Statusleiste."""
+import os
 import sys
 from datetime import datetime
 
@@ -13,6 +14,7 @@ from wiedan.core.model import list_projects, load_project, project_photo
 from wiedan.core.settings import load_settings, save_settings
 from wiedan.features.live import LiveArea, ProjectExplorer
 from wiedan.ui.icons import icon
+from wiedan.ui.spinner import Spinner
 from wiedan.ui.theme import DEFAULT_THEME, THEMES, stylesheet
 from wiedan.ui.welcome import WelcomePage
 
@@ -90,12 +92,22 @@ class MainWindow(QMainWindow):
         report_action.setToolTip("Noch nicht verfügbar")
         self.live_actions_menu.addSeparator()
         self.reachability_action = self.live_actions_menu.addAction(
-            "Erreichbarkeit prüfen", self.explorer.check_reachability
+            "Alle Geräte anpingen", lambda: self.explorer.check_reachability()
         )
         self.explorer.reachability_check_started.connect(self._reachability_check_started)
         self.explorer.reachability_check_finished.connect(self._reachability_check_finished)
+        self.explorer.vehicle_activity_changed.connect(self._update_reachability_action)
+        self.explorer_spinner = Spinner()
+        self.collapse_button = QToolButton()
+        self.collapse_button.setObjectName("sidebaractions")
+        self.collapse_button.setToolTip("Alles einklappen")
+        self.collapse_button.clicked.connect(self.explorer.collapseAll)
         self.sidebar.addWidget(
-            self._sidebar_page("Projekt-Explorer", self.explorer, self.live_actions_button)
+            self._sidebar_page(
+                "Projekt-Explorer", self.explorer,
+                title_extras=(self.explorer_spinner,),
+                actions=(self.collapse_button, self.live_actions_button),
+            )
         )
         self.sidebar.addWidget(self._sidebar_page("Tool-Browser", _placeholder("folgt")))
         self.sidebar.addWidget(self._sidebar_page("Kanäle", _placeholder("folgt")))
@@ -138,8 +150,19 @@ class MainWindow(QMainWindow):
         self.info_label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
         self.info_label.setContentsMargins(0, 0, 12, 0)
         self.info_label.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
+        
+        self.ewon_link = QToolButton()
+        self.ewon_link.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        self.ewon_link.setText("Ewon ECatcher")
+        self.ewon_link.setToolTip("Ewon ECatcher starten")
+        self.ewon_link.setIconSize(QSize(16, 16))
+        self.ewon_link.clicked.connect(
+            lambda: os.startfile(os.path.expandvars(r"%ProgramFiles(X86)%\eCatcher-Talk2M\ECatcher.exe"))
+        )
+        
         self.statusBar().setSizeGripEnabled(False)
         self.statusBar().addWidget(self.project_button)
+        self.statusBar().addWidget(self.ewon_link)
         self.statusBar().addWidget(self.info_label, 1)
         self.welcome.switch_requested.connect(self.project_button.showMenu)
         self._build_menus()
@@ -209,7 +232,10 @@ class MainWindow(QMainWindow):
         return root
 
     @staticmethod
-    def _sidebar_page(title: str, widget: QWidget, actions: QWidget | None = None) -> QFrame:
+    def _sidebar_page(
+        title: str, widget: QWidget, title_extras: tuple[QWidget, ...] = (),
+        actions: tuple[QWidget, ...] = (),
+    ) -> QFrame:
         page = QFrame()
         page.setObjectName("sidebar")
         layout = QVBoxLayout(page)
@@ -217,15 +243,19 @@ class MainWindow(QMainWindow):
         layout.setSpacing(0)
         heading = QLabel(title.upper())
         heading.setObjectName("sidebartitle")
-        if actions is None:
+        if not title_extras and not actions:
             layout.addWidget(heading)
         else:
             header = QWidget()
             header_layout = QHBoxLayout(header)
             header_layout.setContentsMargins(0, 0, 8, 0)
             header_layout.setSpacing(4)
-            header_layout.addWidget(heading, 1)
-            header_layout.addWidget(actions)
+            header_layout.addWidget(heading)
+            for extra in title_extras:
+                header_layout.addWidget(extra)
+            header_layout.addStretch(1)
+            for action in actions:
+                header_layout.addWidget(action)
             layout.addWidget(header)
         layout.addWidget(widget)
         return page
@@ -248,6 +278,9 @@ class MainWindow(QMainWindow):
             button.setIcon(icon(icon_name, colors["muted"], colors["accent"]))
         self.settings_button.setIcon(icon("settings", colors["muted"]))
         self.project_button.setIcon(icon("project", colors["status_text"]))
+        self.ewon_link.setIcon(icon("ewon", colors["status_text"]))
+        self.collapse_button.setIcon(icon("collapse", colors["muted"]))
+        self.explorer_spinner.set_color(colors["muted"])
         self.explorer.set_status_colors(
             colors["muted"], colors["reachable"], colors["unreachable"]
         )
@@ -276,12 +309,14 @@ class MainWindow(QMainWindow):
     def _reachability_check_started(self):
         self.reachability_action.setText("Prüfung läuft …")
         self.reachability_action.setEnabled(False)
+        self.explorer_spinner.set_running(True)
 
     def _reachability_check_finished(self, results, error):
-        self.reachability_action.setText("Erreichbarkeit prüfen")
+        self.explorer_spinner.set_running(False)
+        self.reachability_action.setText("Alle Geräte anpingen")
         self._update_reachability_action()
         if error:
-            QMessageBox.warning(self, "Erreichbarkeitsprüfung fehlgeschlagen", error)
+            QMessageBox.warning(self, "Ping fehlgeschlagen", error)
         elif results is not None:
             reachable = sum(results.values())
             self.log(
@@ -289,8 +324,8 @@ class MainWindow(QMainWindow):
             )
 
     def _update_reachability_action(self):
-        has_pingable_devices = self._project and any(
-            device.pingable for device in self._project.devices.values()
+        has_pingable_devices = any(
+            device.pingable for device in self.explorer.active_devices
         )
         self.reachability_action.setEnabled(
             bool(self._project and self._project.live and has_pingable_devices)

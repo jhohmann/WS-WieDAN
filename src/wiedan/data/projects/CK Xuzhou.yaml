@@ -8,15 +8,123 @@ product: CoasterKart
 
 # Klartext, projektspezifisch. Werte eintragen.
 credentials:
-  client: {user: , password: }
+  client: {user: admin, password: ARI-7140}
 
 # Pro Gerät nur: type + ip (optional label, pingable). Rest steht in library/device_types/.
 central:
-  devices:
-    iso_ups1: {type: bender_iso685, ip: 192.168.196.14, label: Isometer UPS1}
-    iso_ups2: {type: bender_iso685, ip: 192.168.196.229, label: Isometer UPS2}
-    iso_dos1: {type: bender_iso685, ip: 192.168.197.14, label: Isometer DOS1}
-    iso_dos2: {type: bender_iso685, ip: 192.168.197.229, label: Isometer DOS2}
+  control:
+    label: Steuerungstechnik
+    state: operational
+    devices:
+      central_plc_ups: {type: himatrix_f30, ip: 192.168.196.5, label: Zentral SPS UPS}
+      io_extender_ups1: {type: himatrix_remote_io, ip: 192.168.196.6, label: Hima IO Extender UPS1}
+      io_extender_ups1_bcf: {type: beckhoff_kl, ip: 192.168.196.7, label: Beckhoff Feldbusadapter UPS1}
+      io_extender_ups2: {type: himatrix_remote_io, ip: 192.168.196.225, label: Hima IO Extender UPS2}
+      io_extender_ups2_bcf: {type: beckhoff_kl, ip: 192.168.196.227, label: Beckhoff Feldbusadapter UPS2}
+      panel_pc_ups: {type: windows_pc, ip: 192.168.196.10, label: PC Bedienpanel}
+      panel_plc_ups: {type: himatrix_f30, ip: 192.168.196.11, label: Hima Bedienpanel}
+      central_plc_dos: {type: himatrix_f30, ip: 192.168.197.5, label: Zentral SPS DOS}
+      io_extender_dos1: {type: himatrix_remote_io, ip: 192.168.197.6, label: Hima IO Extender DOS1}
+      io_extender_dos1_bcf: {type: beckhoff_kl, ip: 192.168.197.7, label: Beckhoff Feldbusadapter DOS1}
+      panel_pc_dos: {type: windows_pc, ip: 192.168.197.10, label: PC Bedienpanel DOS}
+      panel_plc_dos: {type: himatrix_f30, ip: 192.168.197.11, label: Hima Bedienpanel DOS}
+      central_plc_vehicle_management: {type: himatrix_f30, ip: 192.168.197.20, label: Zentral SPS Fahrzeugmanagement}
+      io_extender_dos2: {type: himatrix_remote_io, ip: 192.168.197.225, label: Hima IO Extender DOS2}
+      io_extender_dos2_bcf: {type: beckhoff_kl, ip: 192.168.197.227, label: Beckhoff Feldbusadapter DOS2}
+  metering:
+    label: Messtechnik
+    state: operational
+    devices:
+      energy_meter_ups1: {type: siemens_sentron_pac3200, ip: 192.168.196.13, label: Energiezähler UPS1}
+      iso_ups1: {type: bender_iso685, ip: 192.168.196.14, label: Isometer UPS1}
+      energy_meter_ups2: {type: siemens_sentron_pac3200, ip: 192.168.196.228, label: Energiezähler UPS2}
+      iso_ups2: {type: bender_iso685, ip: 192.168.196.229, label: Isometer UPS2}
+      energy_meter_dos1: {type: siemens_sentron_pac3200, ip: 192.168.197.13, label: Energiezähler DOS1}
+      iso_dos1: {type: bender_iso685, ip: 192.168.197.14, label: Isometer DOS1} 
+      energy_meter_dos2: {type: siemens_sentron_pac3200, ip: 192.168.197.228, label: Energiezähler DOS2}
+      iso_dos2: {type: bender_iso685, ip: 192.168.197.229, label: Isometer DOS2}
+    
+  network:
+    label: Netzwerk
+    state: operational
+    devices:
+      AP01: {type: siemens_scalance_w700, ip: 192.168.196.230, label: AP01}
+      AP02: {type: siemens_scalance_w700, ip: 192.168.196.231, label: AP02}
+      AP03: {type: siemens_scalance_w700, ip: 192.168.196.232, label: AP03}
+      AP04: {type: siemens_scalance_w700, ip: 192.168.196.233, label: AP04}
+      AP05: {type: siemens_scalance_w700, ip: 192.168.196.234, label: AP05}
+      AP06: {type: siemens_scalance_w700, ip: 192.168.196.235, label: AP06}
+      AP07: {type: siemens_scalance_w700, ip: 192.168.196.236, label: AP07}
+      AP08: {type: siemens_scalance_w700, ip: 192.168.196.237, label: AP08}
+      AP09: {type: siemens_scalance_w700, ip: 192.168.196.240, label: AP09}
+      AP10: {type: siemens_scalance_w700, ip: 192.168.196.241, label: AP10}
+      AP11: {type: siemens_scalance_w700, ip: 192.168.196.242, label: AP11}
+      AP12: {type: siemens_scalance_w700, ip: 192.168.196.243, label: AP12}
+      AP13: {type: siemens_scalance_w700, ip: 192.168.196.244, label: AP13}
+      AP14: {type: siemens_scalance_w700, ip: 192.168.196.245, label: AP14}
+      AP15: {type: siemens_scalance_w700, ip: 192.168.196.246, label: AP15}
+      AP16: {type: siemens_scalance_w700, ip: 192.168.196.247, label: AP16}
+
+      AP17: {type: siemens_scalance_w700, ip: 192.168.197.230, label: AP17}
+      AP18: {type: siemens_scalance_w700, ip: 192.168.197.231, label: AP18}
+      AP19: {type: siemens_scalance_w700, ip: 192.168.197.232, label: AP19}
+      AP20: {type: siemens_scalance_w700, ip: 192.168.197.233, label: AP20}
+      AP21: {type: siemens_scalance_w700, ip: 192.168.197.234, label: AP21}
+      AP22: {type: siemens_scalance_w700, ip: 192.168.197.235, label: AP22}
+      AP23: {type: siemens_scalance_w700, ip: 192.168.197.236, label: AP23}
+      AP24: {type: siemens_scalance_w700, ip: 192.168.197.237, label: AP24}
+      AP25: {type: siemens_scalance_w700, ip: 192.168.197.240, label: AP25}
+      AP26: {type: siemens_scalance_w700, ip: 192.168.197.241, label: AP26}
+      AP27: {type: siemens_scalance_w700, ip: 192.168.197.242, label: AP27}
+      AP28: {type: siemens_scalance_w700, ip: 192.168.197.243, label: AP28}
+      AP29: {type: siemens_scalance_w700, ip: 192.168.197.244, label: AP29}
+      AP30: {type: siemens_scalance_w700, ip: 192.168.197.245, label: AP30}
+      AP31: {type: siemens_scalance_w700, ip: 192.168.197.246, label: AP31}
+      AP32: {type: siemens_scalance_w700, ip: 192.168.197.247, label: AP32}
+
+      switch_ups1-1: {type: siemens_scalance_xc206, ip: 192.168.197.21, label: Switch UPS1 3XF1}
+      switch_ups1-2: {type: siemens_scalance_xc206, ip: 192.168.197.22, label: Switch UPS1 1XF1}
+      switch_ups2-1: {type: siemens_scalance_xc206, ip: 192.168.197.26, label: Switch UPS2 3XF1}
+      switch_ups2-2: {type: siemens_scalance_xc206, ip: 192.168.197.27, label: Switch UPS2 1XF1}
+
+      switch_dos1-1: {type: siemens_scalance_xc206, ip: 192.168.197.121, label: Switch DOS1 3XF1}
+      switch_dos1-2: {type: siemens_scalance_xc206, ip: 192.168.197.122, label: Switch DOS1 1XF1}
+      switch_dos2-1: {type: siemens_scalance_xc206, ip: 192.168.197.126, label: Switch DOS2 3XF1}
+      switch_dos2-2: {type: siemens_scalance_xc206, ip: 192.168.197.127, label: Switch DOS2 1XF1}
+
+      switch_ap01: {type: siemens_scalance_xc206, ip: 192.168.197.30, label: Switch AP01}
+      switch_ap02: {type: siemens_scalance_xc206, ip: 192.168.197.31, label: Switch AP02}
+      switch_ap03: {type: siemens_scalance_xc206, ip: 192.168.197.32, label: Switch AP03}
+      switch_ap04: {type: siemens_scalance_xc206, ip: 192.168.197.33, label: Switch AP04}
+      switch_ap05: {type: siemens_scalance_xc206, ip: 192.168.197.34, label: Switch AP05}
+      switch_ap06: {type: siemens_scalance_xc206, ip: 192.168.197.35, label: Switch AP06}
+      switch_ap07: {type: siemens_scalance_xc206, ip: 192.168.197.36, label: Switch AP07}
+      switch_ap08: {type: siemens_scalance_xc206, ip: 192.168.197.37, label: Switch AP08}
+      switch_ap09: {type: siemens_scalance_xc206, ip: 192.168.197.40, label: Switch AP09}
+      switch_ap10: {type: siemens_scalance_xc206, ip: 192.168.197.41, label: Switch AP10}
+      switch_ap11: {type: siemens_scalance_xc206, ip: 192.168.197.42, label: Switch AP11}
+      switch_ap12: {type: siemens_scalance_xc206, ip: 192.168.197.43, label: Switch AP12}
+      switch_ap13: {type: siemens_scalance_xc206, ip: 192.168.197.44, label: Switch AP13}
+      switch_ap14: {type: siemens_scalance_xc206, ip: 192.168.197.45, label: Switch AP14}
+      switch_ap15: {type: siemens_scalance_xc206, ip: 192.168.197.46, label: Switch AP15}
+      switch_ap16: {type: siemens_scalance_xc206, ip: 192.168.197.47, label: Switch AP16}
+
+      switch_ap17: {type: siemens_scalance_xc206, ip: 192.168.197.130, label: Switch AP17}
+      switch_ap18: {type: siemens_scalance_xc206, ip: 192.168.197.131, label: Switch AP18}
+      switch_ap19: {type: siemens_scalance_xc206, ip: 192.168.197.132, label: Switch AP19}
+      switch_ap20: {type: siemens_scalance_xc206, ip: 192.168.197.133, label: Switch AP20}
+      switch_ap21: {type: siemens_scalance_xc206, ip: 192.168.197.134, label: Switch AP21}
+      switch_ap22: {type: siemens_scalance_xc206, ip: 192.168.197.135, label: Switch AP22}
+      switch_ap23: {type: siemens_scalance_xc206, ip: 192.168.197.136, label: Switch AP23}
+      switch_ap24: {type: siemens_scalance_xc206, ip: 192.168.197.137, label: Switch AP24}
+      switch_ap25: {type: siemens_scalance_xc206, ip: 192.168.197.140, label: Switch AP25}
+      switch_ap26: {type: siemens_scalance_xc206, ip: 192.168.197.141, label: Switch AP26}
+      switch_ap27: {type: siemens_scalance_xc206, ip: 192.168.197.142, label: Switch AP27}
+      switch_ap28: {type: siemens_scalance_xc206, ip: 192.168.197.143, label: Switch AP28}
+      switch_ap29: {type: siemens_scalance_xc206, ip: 192.168.197.144, label: Switch AP29}
+      switch_ap30: {type: siemens_scalance_xc206, ip: 192.168.197.145, label: Switch AP30}
+      switch_ap31: {type: siemens_scalance_xc206, ip: 192.168.197.146, label: Switch AP31}
+      switch_ap32: {type: siemens_scalance_xc206, ip: 192.168.197.147, label: Switch AP32}
 
 vehicles:
   fzg_01:
@@ -26,6 +134,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.22}
       plc: {type: himatrix_f35, ip: 192.168.196.20}
       client: {type: siemens_scalance_w700, ip: 192.168.196.21}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.23}
   fzg_02:
     label: Fzg 02
     state: operational
@@ -33,6 +142,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.27}
       plc: {type: himatrix_f35, ip: 192.168.196.25}
       client: {type: siemens_scalance_w700, ip: 192.168.196.26}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.28}
   fzg_03:
     label: Fzg 03
     state: operational
@@ -40,6 +150,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.32}
       plc: {type: himatrix_f35, ip: 192.168.196.30}
       client: {type: siemens_scalance_w700, ip: 192.168.196.31}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.33}
   fzg_04:
     label: Fzg 04
     state: operational
@@ -47,6 +158,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.37}
       plc: {type: himatrix_f35, ip: 192.168.196.35}
       client: {type: siemens_scalance_w700, ip: 192.168.196.36}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.38}
   fzg_05:
     label: Fzg 05
     state: operational
@@ -54,6 +166,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.42}
       plc: {type: himatrix_f35, ip: 192.168.196.40}
       client: {type: siemens_scalance_w700, ip: 192.168.196.41}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.43}
   fzg_06:
     label: Fzg 06
     state: operational
@@ -61,6 +174,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.47}
       plc: {type: himatrix_f35, ip: 192.168.196.45}
       client: {type: siemens_scalance_w700, ip: 192.168.196.46}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.48}
   fzg_07:
     label: Fzg 07
     state: operational
@@ -68,6 +182,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.52}
       plc: {type: himatrix_f35, ip: 192.168.196.50}
       client: {type: siemens_scalance_w700, ip: 192.168.196.51}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.53}
   fzg_08:
     label: Fzg 08
     state: operational
@@ -75,6 +190,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.57}
       plc: {type: himatrix_f35, ip: 192.168.196.55}
       client: {type: siemens_scalance_w700, ip: 192.168.196.56}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.58}
   fzg_09:
     label: Fzg 09
     state: operational
@@ -82,6 +198,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.62}
       plc: {type: himatrix_f35, ip: 192.168.196.60}
       client: {type: siemens_scalance_w700, ip: 192.168.196.61}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.63}
   fzg_10:
     label: Fzg 10
     state: operational
@@ -89,6 +206,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.67}
       plc: {type: himatrix_f35, ip: 192.168.196.65}
       client: {type: siemens_scalance_w700, ip: 192.168.196.66}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.68}
   fzg_11:
     label: Fzg 11
     state: operational
@@ -96,6 +214,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.72}
       plc: {type: himatrix_f35, ip: 192.168.196.70}
       client: {type: siemens_scalance_w700, ip: 192.168.196.71}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.73}
   fzg_12:
     label: Fzg 12
     state: operational
@@ -103,6 +222,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.77}
       plc: {type: himatrix_f35, ip: 192.168.196.75}
       client: {type: siemens_scalance_w700, ip: 192.168.196.76}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.78}
   fzg_13:
     label: Fzg 13
     state: operational
@@ -110,6 +230,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.82}
       plc: {type: himatrix_f35, ip: 192.168.196.80}
       client: {type: siemens_scalance_w700, ip: 192.168.196.81}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.83}
   fzg_14:
     label: Fzg 14
     state: operational
@@ -117,6 +238,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.87}
       plc: {type: himatrix_f35, ip: 192.168.196.85}
       client: {type: siemens_scalance_w700, ip: 192.168.196.86}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.88}
   fzg_15:
     label: Fzg 15
     state: operational
@@ -124,6 +246,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.92}
       plc: {type: himatrix_f35, ip: 192.168.196.90}
       client: {type: siemens_scalance_w700, ip: 192.168.196.91}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.93}
   fzg_16:
     label: Fzg 16
     state: operational
@@ -131,6 +254,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.97}
       plc: {type: himatrix_f35, ip: 192.168.196.95}
       client: {type: siemens_scalance_w700, ip: 192.168.196.96}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.98}
   fzg_17:
     label: Fzg 17
     state: operational
@@ -138,6 +262,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.102}
       plc: {type: himatrix_f35, ip: 192.168.196.100}
       client: {type: siemens_scalance_w700, ip: 192.168.196.101}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.103}
   fzg_18:
     label: Fzg 18
     state: operational
@@ -145,6 +270,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.107}
       plc: {type: himatrix_f35, ip: 192.168.196.105}
       client: {type: siemens_scalance_w700, ip: 192.168.196.106}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.108}
   fzg_19:
     label: Fzg 19
     state: operational
@@ -152,6 +278,7 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.112}
       plc: {type: himatrix_f35, ip: 192.168.196.110}
       client: {type: siemens_scalance_w700, ip: 192.168.196.111}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.113}
   fzg_20:
     label: Fzg 20
     state: operational
@@ -159,3 +286,164 @@ vehicles:
       inverter: {type: nidec_m700, ip: 192.168.196.117}
       plc: {type: himatrix_f35, ip: 192.168.196.115}
       client: {type: siemens_scalance_w700, ip: 192.168.196.116}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.118}
+  fzg_21:
+    label: Fzg 21
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.122}
+      plc: {type: himatrix_f35, ip: 192.168.196.120}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.121}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.123}
+  fzg_22:
+    label: Fzg 22
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.127}
+      plc: {type: himatrix_f35, ip: 192.168.196.125}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.126}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.128}
+  fzg_23:
+    label: Fzg 23
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.132}
+      plc: {type: himatrix_f35, ip: 192.168.196.130}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.131}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.133}
+  fzg_24:
+    label: Fzg 24
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.137}
+      plc: {type: himatrix_f35, ip: 192.168.196.135}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.136}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.138}
+  fzg_25:
+    label: Fzg 25
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.142}
+      plc: {type: himatrix_f35, ip: 192.168.196.140}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.141}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.143}
+  fzg_26:
+    label: Fzg 26
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.147}
+      plc: {type: himatrix_f35, ip: 192.168.196.145}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.146}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.148}
+  fzg_27:
+    label: Fzg 27
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.152}
+      plc: {type: himatrix_f35, ip: 192.168.196.150}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.151}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.153}
+  fzg_28:
+    label: Fzg 28
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.157}
+      plc: {type: himatrix_f35, ip: 192.168.196.155}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.156}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.158}
+  fzg_29:
+    label: Fzg 29
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.162}
+      plc: {type: himatrix_f35, ip: 192.168.196.160}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.161}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.163}
+  fzg_30:
+    label: Fzg 30
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.167}
+      plc: {type: himatrix_f35, ip: 192.168.196.165}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.166}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.168}
+  fzg_31:
+    label: Fzg 31
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.172}
+      plc: {type: himatrix_f35, ip: 192.168.196.170}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.171}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.173}
+  fzg_32:
+    label: Fzg 32
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.177}
+      plc: {type: himatrix_f35, ip: 192.168.196.175}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.176}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.178}
+  fzg_33:
+    label: Fzg 33
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.182}
+      plc: {type: himatrix_f35, ip: 192.168.196.180}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.181}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.183}
+  fzg_34:
+    label: Fzg 34
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.187}
+      plc: {type: himatrix_f35, ip: 192.168.196.185}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.186}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.188}
+  fzg_35:
+    label: Fzg 35
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.192}
+      plc: {type: himatrix_f35, ip: 192.168.196.190}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.191}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.193}
+  fzg_36:
+    label: Fzg 36
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.197}
+      plc: {type: himatrix_f35, ip: 192.168.196.195}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.196}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.198}
+  fzg_37:
+    label: Fzg 37
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.202}
+      plc: {type: himatrix_f35, ip: 192.168.196.200}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.201}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.203}
+  fzg_38:
+    label: Fzg 38
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.207}
+      plc: {type: himatrix_f35, ip: 192.168.196.205}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.206}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.208}
+  fzg_39:
+    label: Fzg 39
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.212}
+      plc: {type: himatrix_f35, ip: 192.168.196.210}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.211}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.213}
+  fzg_40:
+    label: Fzg 40
+    state: operational
+    devices:
+      inverter: {type: nidec_m700, ip: 192.168.196.217}
+      plc: {type: himatrix_f35, ip: 192.168.196.215}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.216}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.218}

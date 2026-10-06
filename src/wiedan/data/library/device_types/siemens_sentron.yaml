@@ -1,0 +1,7 @@
+device_type:
+  id: siemens_sentron
+  label: Energiemesser Siemens SENTRON
+  category: device
+  pingable: true
+  connection: {protocol: icmp}
+  datapoints: {}

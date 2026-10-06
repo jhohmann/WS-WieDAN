@@ -3,7 +3,7 @@ from PySide6.QtCore import QRectF, Qt, Signal
 from PySide6.QtGui import QPainter, QPainterPath, QPixmap
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QPushButton, QVBoxLayout
 
-PHOTO_OPACITY = 0.15
+PHOTO_OPACITY = 0.2
 RADIUS = 8
 
 
