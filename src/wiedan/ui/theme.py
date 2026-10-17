@@ -1,43 +1,112 @@
 """Farbstile (hell, dunkel, pastell) und das daraus erzeugte Stylesheet."""
 
+from PySide6.QtGui import QColor, QPalette
+
 # Pastell färbt jeden Bereich anders: Hilfsmittel zum Debuggen des Layouts.
 THEMES = {
-    "hell": {
+    "light": {
         "label": "Hell",
-        "header": "#f3f3f3", "surface": "#dcdcdc", "activity": "#ececec", "sidebar": "#f7f7f7",
-        "main": "#ffffff",         "status": "#1b5e3a", "status_text": "#ffffff",
-                "text": "#1f1f1f", "muted": "#6e6e6e", "accent": "#1b5e3a",
-        "reachable": "#5a9a6a", "unreachable": "#b86a6a",
-                "selection": "#d5eadd", "hover": "#e0e0e0", "border": "#d4d4d4",
-        "tab": "#ececec",
+        "window": "#e7eee9",
+        "header": "#f2f6f3", "surface": "#e7eee9", "activity": "#dfe8e2", "sidebar": "#f2f6f3",
+        "main": "#ffffff", "status": "#004F38", "status_text": "#ffffff",
+        "text": "#202e26", "muted": "#59665f", "accent": "#50AF47",
+        "reachable": "#004F38", "unreachable": "#b23a3a",
+        "selection": "#d8ecda", "hover": "#e8f2e9", "border": "#aab9b0",
+        "tab": "#edf3ef", "input": "#ffffff",
+        "primary": "#004F38", "primary_text": "#ffffff",
     },
-    "dunkel": {
+    "dark": {
         "label": "Dunkel",
+        "window": "#121b16",
         "header": "#323233", "surface": "#181818", "activity": "#333333", "sidebar": "#252526",
-        "main": "#1e1e1e",         "status": "#1b5e3a", "status_text": "#ffffff",
-                "text": "#cccccc", "muted": "#858585", "accent": "#3fa56b",
-        "reachable": "#6fae85", "unreachable": "#c98480",
+        "main": "#1e1e1e",         "status": "#004F38", "status_text": "#ffffff",
+                "text": "#dddddd", "muted": "#a0a0a0", "accent": "#50AF47",
+        "reachable": "#50AF47", "unreachable": "#c98480",
                 "selection": "#1f4a33", "hover": "#2a2d2e", "border": "#3c3c3c",
-        "tab": "#2d2d2d",
-    },
-    "pastell": {
-        "label": "Pastell (Debug)",
-        "header": "#cfe8fc", "surface": "#f0f0f0", "activity": "#e3d5f5", "sidebar": "#d5f5e3",
-        "main": "#fdebd0", "status": "#fcf3cf", "status_text": "#333333",
-        "text": "#2b2b2b", "muted": "#6b6b6b", "accent": "#2b2b2b",
-        "reachable": "#5f9a6b", "unreachable": "#b87472",
-        "selection": "#ffd6e0", "hover": "#f5c6d6", "border": "#b0b0b0",
-        "tab": "#fad7a0",
+        "tab": "#2d2d2d", "input": "#252526",
+        "primary": "#50AF47", "primary_text": "#121b16",
     },
 }
 
-DEFAULT_THEME = "dunkel"
+DEFAULT_THEME = "light"
+
+
+def palette(c: dict) -> QPalette:
+    """Färbt auch native Qt-Bedienelemente unabhängig vom Windows-Farbstil."""
+    result = QPalette()
+    for role, key in (
+        (QPalette.ColorRole.Window, "main"),
+        (QPalette.ColorRole.WindowText, "text"),
+        (QPalette.ColorRole.Base, "input"),
+        (QPalette.ColorRole.AlternateBase, "sidebar"),
+        (QPalette.ColorRole.Text, "text"),
+        (QPalette.ColorRole.PlaceholderText, "muted"),
+        (QPalette.ColorRole.Button, "tab"),
+        (QPalette.ColorRole.ButtonText, "text"),
+        (QPalette.ColorRole.BrightText, "primary_text"),
+        (QPalette.ColorRole.Highlight, "selection"),
+        (QPalette.ColorRole.HighlightedText, "text"),
+        (QPalette.ColorRole.Link, "primary"),
+        (QPalette.ColorRole.LinkVisited, "muted"),
+        (QPalette.ColorRole.ToolTipBase, "main"),
+        (QPalette.ColorRole.ToolTipText, "text"),
+        (QPalette.ColorRole.Light, "main"),
+        (QPalette.ColorRole.Midlight, "hover"),
+        (QPalette.ColorRole.Mid, "border"),
+        (QPalette.ColorRole.Dark, "border"),
+        (QPalette.ColorRole.Shadow, "muted"),
+    ):
+        result.setColor(role, QColor(c[key]))
+    for role in (
+        QPalette.ColorRole.WindowText, QPalette.ColorRole.Text,
+        QPalette.ColorRole.ButtonText, QPalette.ColorRole.PlaceholderText,
+    ):
+        result.setColor(QPalette.ColorGroup.Disabled, role, QColor(c["muted"]))
+    result.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Base, QColor(c["tab"]))
+    return result
 
 
 def stylesheet(c: dict) -> str:
     return f"""
     QWidget {{ color: {c['text']}; font-size: 13px; }}
-    QMainWindow {{ background: {c['surface']}; }}
+    QWidget:disabled {{ color: {c['muted']}; }}
+    QMainWindow {{ background: {c['window']}; }}
+    QLineEdit, QAbstractSpinBox, QComboBox, QTextEdit, QPlainTextEdit {{
+        background: {c['input']}; color: {c['text']};
+        border: 2px solid {c['border']}; border-radius: 4px; padding: 4px 6px;
+        selection-background-color: {c['selection']}; selection-color: {c['text']};
+    }}
+    QLineEdit:hover, QAbstractSpinBox:hover, QComboBox:hover,
+    QTextEdit:hover, QPlainTextEdit:hover {{ border-color: {c['muted']}; }}
+    QLineEdit:focus, QAbstractSpinBox:focus, QComboBox:focus,
+    QTextEdit:focus, QPlainTextEdit:focus {{ border-color: {c['accent']}; }}
+    QLineEdit:disabled, QAbstractSpinBox:disabled, QComboBox:disabled,
+    QTextEdit:disabled, QPlainTextEdit:disabled {{
+        background: {c['tab']}; color: {c['muted']}; border-color: {c['border']};
+    }}
+    QAbstractSpinBox QLineEdit, QComboBox QLineEdit {{
+        background: transparent; border: none; padding: 0px;
+    }}
+    QComboBox QAbstractItemView {{
+        background: {c['input']}; color: {c['text']}; border: 1px solid {c['border']};
+        selection-background-color: {c['selection']}; selection-color: {c['text']};
+    }}
+    QPushButton {{
+        background: {c['tab']}; color: {c['text']};
+        border: 2px solid {c['border']}; border-radius: 4px; padding: 4px 12px;
+    }}
+    QPushButton:hover {{ background: {c['hover']}; }}
+    QPushButton:pressed {{ background: {c['selection']}; }}
+    QPushButton:focus {{ border-color: {c['accent']}; }}
+    QPushButton:disabled {{ background: {c['tab']}; color: {c['muted']}; }}
+    QGroupBox {{
+        border: 1px solid {c['border']}; border-radius: 6px;
+        margin-top: 12px; padding: 12px 8px 8px;
+    }}
+    QGroupBox::title {{
+        subcontrol-origin: margin; subcontrol-position: top left;
+        left: 10px; padding: 0px 4px; color: {c['muted']};
+    }}
     #activitybar {{ background: {c['activity']}; border-radius: 8px; }}
     #activitybar QToolButton {{
         background: transparent; border: none; border-left: 2px solid transparent;
@@ -52,7 +121,53 @@ def stylesheet(c: dict) -> str:
         color: {c['muted']}; font-size: 11px; padding: 4px 6px;
     }}
     #sidebaractions:hover {{ background: {c['hover']}; }}
+    #tooltile {{
+        background: {c['tab']}; color: {c['text']};
+        border: 2px solid {c['border']}; border-radius: 12px; padding: 0px;
+    }}
+    #tooltile:hover {{ background: {c['hover']}; border-color: {c['accent']}; }}
+    #tooltile:checked, #tooltile:pressed {{
+        background: {c['selection']}; border-color: {c['accent']};
+    }}
+    #tooltile:focus {{ border-color: {c['accent']}; }}
+    #tooltileicon {{
+        background: {c['main']}; border: 1px solid {c['border']}; border-radius: 14px;
+    }}
+    #tooltiletitle {{
+        color: {c['text']}; font-size: 15px; font-weight: bold;
+        background: transparent; border: none;
+    }}
+    #tooltiledesc {{
+        color: {c['muted']}; font-size: 12px; background: transparent; border: none;
+    }}
     #content {{ background: {c['main']}; border-radius: 8px; }}
+    #modbusTable {{ background: {c['main']}; border: 1px solid {c['border']}; border-radius: 6px; }}
+    #modbusTable::item {{ padding: 6px 10px; border-bottom: 1px solid {c['border']}; }}
+    #modbusTable::item:selected {{ background: {c['selection']}; color: {c['text']}; }}
+    #modbusTable QHeaderView::section {{
+        background: {c['header']}; color: {c['muted']}; border: none; padding: 8px 10px;
+    }}
+    #modbusConnectButton {{
+        background: {c['tab']}; border: 2px solid {c['border']};
+        border-radius: 3px; padding: 4px 12px;
+    }}
+    #modbusConnectButton:hover {{ background: {c['hover']}; }}
+    #modbusConnectButton:pressed {{ background: {c['selection']}; }}
+    #modbusConnectButton:disabled {{ color: {c['muted']}; }}
+    #modbusConnectButton:focus {{ border-color: {c['accent']}; }}
+    #modbusConnectButton[invalid="true"] {{ border-color: {c['unreachable']}; }}
+    QLineEdit[invalid="true"] {{
+        border-color: {c['unreachable']};
+    }}
+    #modbusWriteButton {{
+        background: {c['primary']}; color: {c['primary_text']};
+        border: 2px solid transparent; border-radius: 4px;
+        padding: 5px 12px; font-weight: bold;
+    }}
+    #modbusWriteButton:hover {{ border-color: {c['accent']}; }}
+    #modbusWriteButton:focus {{ border-color: {c['primary_text']}; }}
+    #modbusWriteButton:pressed {{ border-color: {c['text']}; }}
+    #modbusWriteButton:disabled {{ background: {c['tab']}; color: {c['muted']}; }}
     QTreeWidget {{ background: transparent; border: none; outline: 0; }}
     QTreeWidget::item {{ padding: 3px 2px; }}
     QTreeWidget::item:hover {{ background: {c['hover']}; }}
@@ -80,9 +195,11 @@ def stylesheet(c: dict) -> str:
     #welcometitle {{ font-size: 28px; font-weight: 600; background: transparent; }}
     #welcomehint {{ color: {c['muted']}; background: transparent; }}
     #link {{
-        background: transparent; border: none; color: {c['accent']}; padding: 4px 8px;
+        background: transparent; border: 2px solid transparent;
+        color: {c['primary']}; padding: 2px 6px;
     }}
     #link:hover {{ background: {c['hover']}; border-radius: 3px; }}
+    #link:focus {{ border-color: {c['accent']}; border-radius: 3px; }}
     QMenuBar {{ background: {c['header']}; padding: 2px 6px; }}
     QMenuBar::item {{ padding: 4px 10px; border-radius: 3px; background: transparent; }}
     QMenuBar::item:selected {{ background: {c['hover']}; }}

@@ -12,10 +12,11 @@ from PySide6.QtWidgets import (
 
 from wiedan.core.model import list_projects, load_project, project_photo
 from wiedan.core.settings import load_settings, save_settings
+from wiedan.features.commissioning import CommissioningArea, ToolBrowser
 from wiedan.features.live import LiveArea, ProjectExplorer
 from wiedan.ui.icons import icon
 from wiedan.ui.spinner import Spinner
-from wiedan.ui.theme import DEFAULT_THEME, THEMES, stylesheet
+from wiedan.ui.theme import DEFAULT_THEME, THEMES, palette, stylesheet
 from wiedan.ui.welcome import WelcomePage
 
 # (Schlüssel, Name, Icon)
@@ -109,10 +110,14 @@ class MainWindow(QMainWindow):
                 actions=(self.collapse_button, self.live_actions_button),
             )
         )
-        self.sidebar.addWidget(self._sidebar_page("Tool-Browser", _placeholder("folgt")))
+        self.tool_browser = ToolBrowser()
+        self.commissioning_area = CommissioningArea()
+        self.commissioning_area.message.connect(self.log)
+        self.tool_browser.tool_chosen.connect(self.commissioning_area.open_tool)
+        self.sidebar.addWidget(self._sidebar_page("Tool-Browser", self.tool_browser))
         self.sidebar.addWidget(self._sidebar_page("Kanäle", _placeholder("folgt")))
         self.content.addWidget(self.live_stack)
-        self.content.addWidget(_placeholder("Inbetriebnahme folgt"))
+        self.content.addWidget(self.commissioning_area)
         self.content.addWidget(_placeholder("Plotter folgt"))
 
         self.project_button = QToolButton()
@@ -183,7 +188,7 @@ class MainWindow(QMainWindow):
         project_menu.addActions(self.project_menu.actions())
         help_menu = bar.addMenu("Hilfe")
         help_menu.addAction(
-            "Über WieDAN", lambda: QMessageBox.about(self, "WieDAN", "WieDAN – Werkzeugkasten")
+            "Über WieDAN", lambda: QMessageBox.about(self, "WieDAN", "WieDAN - Werkzeugkasten")
         )
 
     def log(self, text: str):
@@ -273,13 +278,16 @@ class MainWindow(QMainWindow):
 
     def _apply_theme(self):
         colors = THEMES[self._theme]
-        QApplication.instance().setStyleSheet(stylesheet(colors))
+        app = QApplication.instance()
+        app.setPalette(palette(colors))
+        app.setStyleSheet(stylesheet(colors))
         for button, (_key, _name, icon_name) in zip(self.mode_buttons, MODES):
             button.setIcon(icon(icon_name, colors["muted"], colors["accent"]))
         self.settings_button.setIcon(icon("settings", colors["muted"]))
         self.project_button.setIcon(icon("project", colors["status_text"]))
         self.ewon_link.setIcon(icon("ewon", colors["status_text"]))
         self.collapse_button.setIcon(icon("collapse", colors["muted"]))
+        self.tool_browser.set_icon_color(colors["accent"])
         self.explorer_spinner.set_color(colors["muted"])
         self.explorer.set_status_colors(
             colors["muted"], colors["reachable"], colors["unreachable"]
