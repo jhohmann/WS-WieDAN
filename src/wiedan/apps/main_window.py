@@ -297,22 +297,32 @@ class MainWindow(QMainWindow):
         self.live_stack.setCurrentWidget(self.live_area if self.live_area.count() else self.welcome)
 
     def _switch_project(self, project_id: str):
-        self.set_project(project_id)
-        self.log(f"Projekt {self._project.name} geöffnet")
+        if self.set_project(project_id):
+            self.log(f"Projekt {self._project.name} geöffnet")
 
     def set_project(self, project_id: str):
+        if self._project is not None and not self.commissioning_area.can_leave_project():
+            return False
         self._project = load_project(project_id)
         self.project_button.setText(f" {project_id}  ▴")
         self.welcome.set_project(self._project.full_name, project_photo(project_id))
         self.live_area.close_all()
         self._update_live_stack()
         self.explorer.set_project(self._project)
+        self.commissioning_area.set_project(self._project)
         live_button = self.mode_buttons[0]
         live_button.setEnabled(self._project.live)
         live_button.setToolTip("Live" if self._project.live else "Live: für dieses Projekt nicht verfügbar")
         self._update_reachability_action()
         if not self._project.live and live_button.isChecked():
             self.mode_buttons[1].click()
+        return True
+
+    def closeEvent(self, event):
+        if self.commissioning_area.can_leave_project():
+            super().closeEvent(event)
+        else:
+            event.ignore()
 
     def _reachability_check_started(self):
         self.reachability_action.setText("Prüfung läuft …")

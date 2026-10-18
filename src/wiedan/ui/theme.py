@@ -121,6 +121,14 @@ def stylesheet(c: dict) -> str:
         color: {c['muted']}; font-size: 11px; padding: 4px 6px;
     }}
     #sidebaractions:hover {{ background: {c['hover']}; }}
+    #toolbrowser, #toolbrowsercontent {{ background: transparent; }}
+    #toolcategory {{
+        background: transparent;
+        color: {c['muted']}; font-size: 11px; font-weight: 600;
+        border: none; border-radius: 3px; padding: 4px 6px; text-align: left;
+    }}
+    #toolbrowser #toolcategory:hover {{ background: {c['hover']}; }}
+    #toolbrowser #toolcategory:focus {{ color: {c['text']}; background: {c['hover']}; }}
     #tooltile {{
         background: {c['tab']}; color: {c['text']};
         border: 2px solid {c['border']}; border-radius: 12px; padding: 0px;
@@ -140,7 +148,21 @@ def stylesheet(c: dict) -> str:
     #tooltiledesc {{
         color: {c['muted']}; font-size: 12px; background: transparent; border: none;
     }}
+    #tooltile:disabled #tooltiletitle, #tooltile:disabled #tooltiledesc {{ color: {c['muted']}; }}
     #content {{ background: {c['main']}; border-radius: 8px; }}
+    #scalanceTitle {{ font-size: 17px; font-weight: 600; }}
+    #scalanceTree {{ background: {c['sidebar']}; border-radius: 8px; padding: 4px; }}
+    #scalanceTree QHeaderView::section {{
+        background: {c['sidebar']}; color: {c['muted']}; border: none; padding: 6px;
+    }}
+    #scalanceStatus {{ background: {c['sidebar']}; border-radius: 4px; padding: 8px; }}
+    #scalanceStatus[error="true"] {{ color: {c['unreachable']}; border: 1px solid {c['unreachable']}; }}
+    #scalanceTable {{ background: {c['main']}; border: 1px solid {c['border']}; }}
+    #scalanceTable::item {{ padding: 4px; }}
+    #scalanceTable::item:selected {{ background: {c['selection']}; color: {c['text']}; }}
+    #scalanceTable QHeaderView::section {{
+        background: {c['sidebar']}; color: {c['muted']}; border: none; padding: 5px;
+    }}
     #modbusTable {{ background: {c['main']}; border: 1px solid {c['border']}; border-radius: 6px; }}
     #modbusTable::item {{ padding: 6px 10px; border-bottom: 1px solid {c['border']}; }}
     #modbusTable::item:selected {{ background: {c['selection']}; color: {c['text']}; }}

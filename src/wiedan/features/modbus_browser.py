@@ -436,7 +436,7 @@ class ModbusBrowser(QWidget):
         self._write_group.setTitle("Coils schreiben" if coils else "Vollständige Register schreiben")
         self._write_value_label.setText("Coils (Adresse →)" if coils else "Neuer Wert")
         self._write_value.setPlaceholderText(
-            "z. B. 1 0 1 1 – linke Ziffer = Startadresse" if coils
+            "z. B. 1 0 1 1" if coils
             else "Neuer Wert, z. B. 123 oder 0x7B"
         )
         self._write_group.setToolTip(

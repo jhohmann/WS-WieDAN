@@ -1,0 +1,106 @@
+# Building configuration...
+!
+system name "AP01"
+ip dhcp config-file-request
+!
+wlan
+ country code ME
+!
+interface wlan 0/1
+ wlan allowed channels only
+ no wlan ampdu
+ no wlan amsdu
+ wlan antenna type 1 17
+ wlan antenna additional-attenuation 1 0
+ wlan antenna cable-length 1 2
+ wlan antenna gain-5GHz 1 0
+ wlan antenna type 2 T
+ wlan beacon interval 1000
+ wlan channel 165
+ wlan frequency band 5
+ wlan data rates-11abg selected only
+ wlan data rate-11abg del 6.0
+ wlan data rate-11abg del 9.0
+ wlan data rate-11abg add 12.0 basic
+ wlan data rate-11abg del 18.0
+ wlan data rate-11abg del 24.0
+ wlan data rate-11abg del 36.0
+ wlan data rate-11abg del 48.0
+ wlan data rate-11abg del 54.0
+ wlan hw-retries 8
+ wlan ipcf
+ wlan ipcf cycle-time 64
+ wlan max tx-power 14
+ wlan mode a
+ wlan allowed channels del 5 184
+ wlan allowed channels del 5 188
+ wlan allowed channels del 5 192
+ wlan allowed channels del 5 196
+ wlan allowed channels del 5 8
+ wlan allowed channels del 5 12
+ wlan allowed channels del 5 16
+ wlan allowed channels del 5 36
+ wlan allowed channels del 5 40
+ wlan allowed channels del 5 44
+ wlan allowed channels del 5 48
+ wlan allowed channels del 5 52
+ wlan allowed channels del 5 56
+ wlan allowed channels del 5 60
+ wlan allowed channels del 5 64
+ wlan allowed channels del 5 96
+ wlan allowed channels del 5 100
+ wlan allowed channels del 5 104
+ wlan allowed channels del 5 108
+ wlan allowed channels del 5 112
+ wlan allowed channels del 5 116
+ wlan allowed channels del 5 120
+ wlan allowed channels del 5 124
+ wlan allowed channels del 5 128
+ wlan allowed channels del 5 132
+ wlan allowed channels del 5 136
+ wlan allowed channels del 5 140
+ wlan allowed channels add 5 149
+ wlan allowed channels add 5 153
+ wlan allowed channels add 5 157
+ wlan allowed channels add 5 161
+ wlan allowed channels add 5 165
+ no shutdown
+!
+interface vap1 0/1
+ no vap communication with other-vaps
+ no vap communication within own-vap
+ vap ssid "4099"
+!
+interface vap1 0/2
+ no vap communication with other-vaps
+ no vap communication within own-vap
+!
+interface vap1 0/3
+ no vap communication with other-vaps
+ no vap communication within own-vap
+!
+interface vap1 0/4
+ no vap communication with other-vaps
+ no vap communication within own-vap
+!
+interface vlan 1
+ no ip address
+ no ip address dhcp
+ ip address  192.168.196.230 255.255.255.0
+!
+ip route 192.168.196.253
+!
+dcp server read-write
+!
+events
+ event config ipcf-cycle-time email
+ event config ipcf-poll-size email
+ event config ipcf-cycle-time trap
+ event config ipcf-poll-size trap
+ event config ipcf-cycle-time logtable
+ event config ipcf-poll-size logtable
+ event config ipcf-cycle-time syslog
+ event config ipcf-poll-size syslog
+!
+
+end

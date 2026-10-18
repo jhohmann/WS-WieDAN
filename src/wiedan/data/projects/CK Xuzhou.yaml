@@ -131,319 +131,319 @@ vehicles:
     label: Fzg 01
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.22}
-      plc: {type: himatrix_f35, ip: 192.168.196.20}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.21}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.23}
+      inverter: {type: nidec_m700, ip: 192.168.196.22, label: FU01}
+      plc: {type: himatrix_f35, ip: 192.168.196.20, label: SPS01}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.21, label: CL01}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.23, label: TBEN01}
   fzg_02:
     label: Fzg 02
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.27}
-      plc: {type: himatrix_f35, ip: 192.168.196.25}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.26}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.28}
+      inverter: {type: nidec_m700, ip: 192.168.196.27, label: FU02}
+      plc: {type: himatrix_f35, ip: 192.168.196.25, label: SPS02}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.26, label: CL02}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.28, label: TBEN02}
   fzg_03:
     label: Fzg 03
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.32}
-      plc: {type: himatrix_f35, ip: 192.168.196.30}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.31}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.33}
+      inverter: {type: nidec_m700, ip: 192.168.196.32, label: FU03}
+      plc: {type: himatrix_f35, ip: 192.168.196.30, label: SPS03}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.31, label: CL03}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.33, label: TBEN03}
   fzg_04:
     label: Fzg 04
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.37}
-      plc: {type: himatrix_f35, ip: 192.168.196.35}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.36}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.38}
+      inverter: {type: nidec_m700, ip: 192.168.196.37, label: FU04}
+      plc: {type: himatrix_f35, ip: 192.168.196.35, label: SPS04}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.36, label: CL04}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.38, label: TBEN04}
   fzg_05:
     label: Fzg 05
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.42}
-      plc: {type: himatrix_f35, ip: 192.168.196.40}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.41}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.43}
+      inverter: {type: nidec_m700, ip: 192.168.196.42, label: FU05}
+      plc: {type: himatrix_f35, ip: 192.168.196.40, label: SPS05}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.41, label: CL05}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.43, label: TBEN05}
   fzg_06:
     label: Fzg 06
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.47}
-      plc: {type: himatrix_f35, ip: 192.168.196.45}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.46}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.48}
+      inverter: {type: nidec_m700, ip: 192.168.196.47, label: FU06}
+      plc: {type: himatrix_f35, ip: 192.168.196.45, label: SPS06}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.46, label: CL06}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.48, label: TBEN06}
   fzg_07:
     label: Fzg 07
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.52}
-      plc: {type: himatrix_f35, ip: 192.168.196.50}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.51}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.53}
+      inverter: {type: nidec_m700, ip: 192.168.196.52, label: FU07}
+      plc: {type: himatrix_f35, ip: 192.168.196.50, label: SPS07}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.51, label: CL07}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.53, label: TBEN07}
   fzg_08:
     label: Fzg 08
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.57}
-      plc: {type: himatrix_f35, ip: 192.168.196.55}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.56}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.58}
+      inverter: {type: nidec_m700, ip: 192.168.196.57, label: FU08}
+      plc: {type: himatrix_f35, ip: 192.168.196.55, label: SPS08}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.56, label: CL08}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.58, label: TBEN08}
   fzg_09:
     label: Fzg 09
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.62}
-      plc: {type: himatrix_f35, ip: 192.168.196.60}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.61}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.63}
+      inverter: {type: nidec_m700, ip: 192.168.196.62, label: FU09}
+      plc: {type: himatrix_f35, ip: 192.168.196.60, label: SPS09}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.61, label: CL09}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.63, label: TBEN09}
   fzg_10:
     label: Fzg 10
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.67}
-      plc: {type: himatrix_f35, ip: 192.168.196.65}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.66}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.68}
+      inverter: {type: nidec_m700, ip: 192.168.196.67, label: FU10}
+      plc: {type: himatrix_f35, ip: 192.168.196.65, label: SPS10}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.66, label: CL10}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.68, label: TBEN10}
   fzg_11:
     label: Fzg 11
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.72}
-      plc: {type: himatrix_f35, ip: 192.168.196.70}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.71}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.73}
+      inverter: {type: nidec_m700, ip: 192.168.196.72, label: FU11}
+      plc: {type: himatrix_f35, ip: 192.168.196.70, label: SPS11}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.71, label: CL11}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.73, label: TBEN11}
   fzg_12:
     label: Fzg 12
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.77}
-      plc: {type: himatrix_f35, ip: 192.168.196.75}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.76}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.78}
+      inverter: {type: nidec_m700, ip: 192.168.196.77, label: FU12}
+      plc: {type: himatrix_f35, ip: 192.168.196.75, label: SPS12}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.76, label: CL12}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.78, label: TBEN12}
   fzg_13:
     label: Fzg 13
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.82}
-      plc: {type: himatrix_f35, ip: 192.168.196.80}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.81}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.83}
+      inverter: {type: nidec_m700, ip: 192.168.196.82, label: FU13}
+      plc: {type: himatrix_f35, ip: 192.168.196.80, label: SPS13}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.81, label: CL13}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.83, label: TBEN13}
   fzg_14:
     label: Fzg 14
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.87}
-      plc: {type: himatrix_f35, ip: 192.168.196.85}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.86}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.88}
+      inverter: {type: nidec_m700, ip: 192.168.196.87, label: FU14}
+      plc: {type: himatrix_f35, ip: 192.168.196.85, label: SPS14}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.86, label: CL14}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.88, label: TBEN14}
   fzg_15:
     label: Fzg 15
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.92}
-      plc: {type: himatrix_f35, ip: 192.168.196.90}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.91}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.93}
+      inverter: {type: nidec_m700, ip: 192.168.196.92, label: FU15}
+      plc: {type: himatrix_f35, ip: 192.168.196.90, label: SPS15}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.91, label: CL15}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.93, label: TBEN15}
   fzg_16:
     label: Fzg 16
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.97}
-      plc: {type: himatrix_f35, ip: 192.168.196.95}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.96}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.98}
+      inverter: {type: nidec_m700, ip: 192.168.196.97, label: FU16}
+      plc: {type: himatrix_f35, ip: 192.168.196.95, label: SPS16}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.96, label: CL16}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.98, label: TBEN16}
   fzg_17:
     label: Fzg 17
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.102}
-      plc: {type: himatrix_f35, ip: 192.168.196.100}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.101}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.103}
+      inverter: {type: nidec_m700, ip: 192.168.196.102, label: FU17}
+      plc: {type: himatrix_f35, ip: 192.168.196.100, label: SPS17}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.101, label: CL17}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.103, label: TBEN17}
   fzg_18:
     label: Fzg 18
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.107}
-      plc: {type: himatrix_f35, ip: 192.168.196.105}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.106}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.108}
+      inverter: {type: nidec_m700, ip: 192.168.196.107, label: FU18}
+      plc: {type: himatrix_f35, ip: 192.168.196.105, label: SPS18}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.106, label: CL18}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.108, label: TBEN18}
   fzg_19:
     label: Fzg 19
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.112}
-      plc: {type: himatrix_f35, ip: 192.168.196.110}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.111}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.113}
+      inverter: {type: nidec_m700, ip: 192.168.196.112, label: FU19}
+      plc: {type: himatrix_f35, ip: 192.168.196.110, label: SPS19}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.111, label: CL19}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.113, label: TBEN19}
   fzg_20:
     label: Fzg 20
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.117}
-      plc: {type: himatrix_f35, ip: 192.168.196.115}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.116}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.118}
+      inverter: {type: nidec_m700, ip: 192.168.196.117, label: FU20}
+      plc: {type: himatrix_f35, ip: 192.168.196.115, label: SPS20}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.116, label: CL20}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.118, label: TBEN20}
   fzg_21:
     label: Fzg 21
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.122}
-      plc: {type: himatrix_f35, ip: 192.168.196.120}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.121}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.123}
+      inverter: {type: nidec_m700, ip: 192.168.196.122, label: FU21}
+      plc: {type: himatrix_f35, ip: 192.168.196.120, label: SPS21}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.121, label: CL21}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.123, label: TBEN21}
   fzg_22:
     label: Fzg 22
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.127}
-      plc: {type: himatrix_f35, ip: 192.168.196.125}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.126}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.128}
+      inverter: {type: nidec_m700, ip: 192.168.196.127, label: FU22}
+      plc: {type: himatrix_f35, ip: 192.168.196.125, label: SPS22}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.126, label: CL22}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.128, label: TBEN22}
   fzg_23:
     label: Fzg 23
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.132}
-      plc: {type: himatrix_f35, ip: 192.168.196.130}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.131}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.133}
+      inverter: {type: nidec_m700, ip: 192.168.196.132, label: FU23}
+      plc: {type: himatrix_f35, ip: 192.168.196.130, label: SPS23}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.131, label: CL23}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.133, label: TBEN23}
   fzg_24:
     label: Fzg 24
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.137}
-      plc: {type: himatrix_f35, ip: 192.168.196.135}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.136}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.138}
+      inverter: {type: nidec_m700, ip: 192.168.196.137, label: FU24}
+      plc: {type: himatrix_f35, ip: 192.168.196.135, label: SPS24}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.136, label: CL24}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.138, label: TBEN24}
   fzg_25:
     label: Fzg 25
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.142}
-      plc: {type: himatrix_f35, ip: 192.168.196.140}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.141}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.143}
+      inverter: {type: nidec_m700, ip: 192.168.196.142, label: FU25}
+      plc: {type: himatrix_f35, ip: 192.168.196.140, label: SPS25}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.141, label: CL25}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.143, label: TBEN25}
   fzg_26:
     label: Fzg 26
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.147}
-      plc: {type: himatrix_f35, ip: 192.168.196.145}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.146}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.148}
+      inverter: {type: nidec_m700, ip: 192.168.196.147, label: FU26}
+      plc: {type: himatrix_f35, ip: 192.168.196.145, label: SPS26}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.146, label: CL26}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.148, label: TBEN26}
   fzg_27:
     label: Fzg 27
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.152}
-      plc: {type: himatrix_f35, ip: 192.168.196.150}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.151}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.153}
+      inverter: {type: nidec_m700, ip: 192.168.196.152, label: FU27}
+      plc: {type: himatrix_f35, ip: 192.168.196.150, label: SPS27}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.151, label: CL27}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.153, label: TBEN27}
   fzg_28:
     label: Fzg 28
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.157}
-      plc: {type: himatrix_f35, ip: 192.168.196.155}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.156}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.158}
+      inverter: {type: nidec_m700, ip: 192.168.196.157, label: FU28}
+      plc: {type: himatrix_f35, ip: 192.168.196.155, label: SPS28}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.156, label: CL28}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.158, label: TBEN28}
   fzg_29:
     label: Fzg 29
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.162}
-      plc: {type: himatrix_f35, ip: 192.168.196.160}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.161}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.163}
+      inverter: {type: nidec_m700, ip: 192.168.196.162, label: FU29}
+      plc: {type: himatrix_f35, ip: 192.168.196.160, label: SPS29}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.161, label: CL29}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.163, label: TBEN29}
   fzg_30:
     label: Fzg 30
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.167}
-      plc: {type: himatrix_f35, ip: 192.168.196.165}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.166}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.168}
+      inverter: {type: nidec_m700, ip: 192.168.196.167, label: FU30}
+      plc: {type: himatrix_f35, ip: 192.168.196.165, label: SPS30}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.166, label: CL30}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.168, label: TBEN30}
   fzg_31:
     label: Fzg 31
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.172}
-      plc: {type: himatrix_f35, ip: 192.168.196.170}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.171}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.173}
+      inverter: {type: nidec_m700, ip: 192.168.196.172, label: FU31}
+      plc: {type: himatrix_f35, ip: 192.168.196.170, label: SPS31}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.171, label: CL31}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.173, label: TBEN31}
   fzg_32:
     label: Fzg 32
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.177}
-      plc: {type: himatrix_f35, ip: 192.168.196.175}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.176}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.178}
+      inverter: {type: nidec_m700, ip: 192.168.196.177, label: FU32}
+      plc: {type: himatrix_f35, ip: 192.168.196.175, label: SPS32}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.176, label: CL32}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.178, label: TBEN32}
   fzg_33:
     label: Fzg 33
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.182}
-      plc: {type: himatrix_f35, ip: 192.168.196.180}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.181}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.183}
+      inverter: {type: nidec_m700, ip: 192.168.196.182, label: FU33}
+      plc: {type: himatrix_f35, ip: 192.168.196.180, label: SPS33}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.181, label: CL33}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.183, label: TBEN33}
   fzg_34:
     label: Fzg 34
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.187}
-      plc: {type: himatrix_f35, ip: 192.168.196.185}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.186}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.188}
+      inverter: {type: nidec_m700, ip: 192.168.196.187, label: FU34}
+      plc: {type: himatrix_f35, ip: 192.168.196.185, label: SPS34}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.186, label: CL34}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.188, label: TBEN34}
   fzg_35:
     label: Fzg 35
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.192}
-      plc: {type: himatrix_f35, ip: 192.168.196.190}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.191}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.193}
+      inverter: {type: nidec_m700, ip: 192.168.196.192, label: FU35}
+      plc: {type: himatrix_f35, ip: 192.168.196.190, label: SPS35}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.191, label: CL35}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.193, label: TBEN35}
   fzg_36:
     label: Fzg 36
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.197}
-      plc: {type: himatrix_f35, ip: 192.168.196.195}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.196}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.198}
+      inverter: {type: nidec_m700, ip: 192.168.196.197, label: FU36}
+      plc: {type: himatrix_f35, ip: 192.168.196.195, label: SPS36}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.196, label: CL36}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.198, label: TBEN36}
   fzg_37:
     label: Fzg 37
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.202}
-      plc: {type: himatrix_f35, ip: 192.168.196.200}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.201}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.203}
+      inverter: {type: nidec_m700, ip: 192.168.196.202, label: FU37}
+      plc: {type: himatrix_f35, ip: 192.168.196.200, label: SPS37}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.201, label: CL37}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.203, label: TBEN37}
   fzg_38:
     label: Fzg 38
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.207}
-      plc: {type: himatrix_f35, ip: 192.168.196.205}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.206}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.208}
+      inverter: {type: nidec_m700, ip: 192.168.196.207, label: FU38}
+      plc: {type: himatrix_f35, ip: 192.168.196.205, label: SPS38}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.206, label: CL38}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.208, label: TBEN38}
   fzg_39:
     label: Fzg 39
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.212}
-      plc: {type: himatrix_f35, ip: 192.168.196.210}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.211}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.213}
+      inverter: {type: nidec_m700, ip: 192.168.196.212, label: FU39}
+      plc: {type: himatrix_f35, ip: 192.168.196.210, label: SPS39}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.211, label: CL39}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.213, label: TBEN39}
   fzg_40:
     label: Fzg 40
     state: operational
     devices:
-      inverter: {type: nidec_m700, ip: 192.168.196.217}
-      plc: {type: himatrix_f35, ip: 192.168.196.215}
-      client: {type: siemens_scalance_w700, ip: 192.168.196.216}
-      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.218}
+      inverter: {type: nidec_m700, ip: 192.168.196.217, label: FU40}
+      plc: {type: himatrix_f35, ip: 192.168.196.215, label: SPS40}
+      client: {type: siemens_scalance_w700, ip: 192.168.196.216, label: CL40}
+      io_extender: {type: turck_tben_s1_8dxp, ip: 192.168.196.218, label: TBEN40}
