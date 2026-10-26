@@ -22,6 +22,16 @@ def pick(name: str | None, fallback: str) -> str:
     return fallback
 
 
+def node_icon_name(path: str, *, is_root: bool, vehicle_product: str | None = None,
+                   is_vehicle: bool = False) -> str:
+    """Gemeinsame Knotensymbole für Live-Ansicht und Projekteditor."""
+    if is_root and is_vehicle:
+        return pick(vehicle_product, "vehicle")
+    if is_root and path == "central":
+        return "central"
+    return "node"
+
+
 @cache
 def _pixmap(name: str, color: str) -> QPixmap:
     svg = _source(name).replace("currentColor", color)

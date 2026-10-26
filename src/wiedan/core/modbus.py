@@ -6,6 +6,7 @@ import threading
 
 READ_DISCRETE_INPUTS = 0x02
 READ_HOLDING_REGISTERS = 0x03
+WRITE_SINGLE_COIL = 0x05
 WRITE_SINGLE_REGISTER = 0x06
 WRITE_MULTIPLE_COILS = 0x0F
 WRITE_MULTIPLE_REGISTERS = 0x10
@@ -77,6 +78,15 @@ class ModbusTcpClient:
         if self._request(WRITE_MULTIPLE_REGISTERS, payload) != struct.pack(">HH", address, count):
             raise ModbusError("Ungültige Antwort")
 
+    def write_single_coil(self, address: int, value: int):
+        """Schreibt einen Coil mit FC05; die SPS muss Adresse und Wert bestätigen."""
+        _check_request(address, 1, 1)
+        if value not in (0, 1):
+            raise ValueError("Coil-Wert muss 0 oder 1 sein")
+        request = struct.pack(">HH", address, 0xFF00 if value else 0x0000)
+        if self._request(WRITE_SINGLE_COIL, request) != request:
+            raise ModbusError("Ungültige Antwort")
+
     def write_multiple_coils(self, address: int, values: list[int]):
         """Schreibt 0/1-Werte ab address in aufsteigender Adressfolge (FC15 / 0x0F)."""
         count = len(values)
@@ -99,14 +109,25 @@ class ModbusTcpClient:
             transaction_id = next(self._transaction_ids) & 0xFFFF
             pdu = bytes([function]) + payload
             request = struct.pack(">HHHB", transaction_id, 0, 1 + len(pdu), self.unit_id) + pdu
+            phase = "Senden der Anfrage"
             try:
                 sock.sendall(request)
+                phase = "Empfangen des Antwort-Headers"
                 header = _recv_exact(sock, _MBAP_HEADER_SIZE)
                 response_id, _protocol, length, _unit = struct.unpack(">HHHB", header)
+                phase = "Empfangen der Antwortdaten"
                 response = _recv_exact(sock, length - 1)
+            except socket.timeout as exc:
+                self.close()
+                raise ModbusError(
+                    f"Timeout ({self.timeout:g} s) beim {phase} "
+                    f"für FC{function:02d}, Unit-ID {self.unit_id}."
+                ) from exc
             except OSError as exc:
                 self.close()
-                raise ModbusError(f"Übertragung fehlgeschlagen: {exc}") from exc
+                raise ModbusError(
+                    f"Fehler beim {phase} für FC{function:02d}, Unit-ID {self.unit_id}: {exc}"
+                ) from exc
 
         if response_id != transaction_id:
             raise ModbusError("Antwort passt nicht zur Anfrage")

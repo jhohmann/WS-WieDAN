@@ -1,9 +1,6 @@
-"""Stammdaten laden. Daten sind read-only und liegen im Paket (auch in der .exe)."""
+"""Gemeinsames Projektmodell mit lesendem SQLite-Zugriff."""
 from dataclasses import dataclass, field
-from functools import cache
-from importlib.resources import files
-
-import yaml
+from pathlib import Path
 
 
 @dataclass(frozen=True)
@@ -16,9 +13,12 @@ class Device:
     connection: dict
     commissioning_connection: dict | None = None
     category: str | None = None  # inverter, plc, comms, io; None = nicht zugeordnet
-
-
-_NODE_KEYS = {"label", "state", "devices"}
+    uid: str = ""  # Dauerhafte Identität; id bleibt der lesbare Pfad für die bestehende UI.
+    installation_position: float | None = None  # Meter relativ zum Strecken-Nullpunkt
+    track_start: float | None = None
+    track_end: float | None = None
+    parameters: dict = field(default_factory=dict)
+    documentation: dict = field(default_factory=dict)  # Feld-UUID -> Wert; keine Geräteparameter.
 
 
 @dataclass
@@ -29,6 +29,8 @@ class Node:
     state: str | None = None  # z. B. operational
     children: list["Node"] = field(default_factory=list)
     devices: list[str] = field(default_factory=list)  # Geräte-IDs dieses Knotens
+    uid: str = ""
+    vehicle: str | None = None
 
     def walk_devices(self):
         """Alle Geräte-IDs dieses Knotens und aller Unterknoten."""
@@ -49,8 +51,16 @@ class Project:
     control: str  # Steuerungstyp, z. B. HIMA
     product: str  # Produkttyp der Fahrzeuge, z. B. CoasterKart
     vehicle_products: dict[str, str]  # Fahrzeug-ID -> Produkttyp
-    central: "Node"  # Strukturbaum der Zentrale (aus YAML)
+    central: "Node"  # Strukturbaum der Zentrale
     vehicle_nodes: dict[str, "Node"]  # Fahrzeug-ID -> Strukturbaum des Fahrzeugs
+    uid: str = ""
+    database_path: Path | None = None
+    schema_version: int = 0
+    data_version: str = ""
+    database_uid: str = ""
+    display_name: str = ""
+    root_nodes: list[Node] = field(default_factory=list)
+    device_field_definitions: dict = field(default_factory=dict)
 
     def find(self, type=None, vehicle=None, central=None):
         """Geräte filtern. central=True: nur Zentrale, central=False: nur Fahrzeuge."""
@@ -62,83 +72,19 @@ class Project:
         ]
 
 
-def _data(*parts: str):
-    path = files("wiedan") / "data"
-    for part in parts:
-        path = path / part
-    return path
-
-
 def project_photo(project_id: str) -> bytes | None:
-    """Projektfoto `projects/<id>.jpg` oder `.png`, falls vorhanden."""
-    for ext in ("jpg", "png"):
-        path = _data("projects", f"{project_id}.{ext}")
-        if path.is_file():
-            return path.read_bytes()
-    return None
+    from wiedan.core.project_database import project_photo as read_photo
 
-
-def _read_yaml(*parts: str) -> dict:
-    return yaml.safe_load(_data(*parts).read_text(encoding="utf-8"))
-
-
-@cache
-def _load_device_type(type_id: str) -> dict:
-    return _read_yaml("library", "device_types", f"{type_id}.yaml")["device_type"]
+    return read_photo(project_id)
 
 
 def list_projects() -> list[str]:
-    return sorted(p.name[:-5] for p in _data("projects").iterdir() if p.name.endswith(".yaml"))
+    from wiedan.core.project_database import list_projects as stored_projects
+
+    return stored_projects()
 
 
 def load_project(project_id: str) -> Project:
-    raw = _read_yaml("projects", f"{project_id}.yaml")
-    devices = {}
+    from wiedan.core.project_database import load_project as stored_project
 
-    def add(vehicle, dev_id, d):
-        t = _load_device_type(d["type"])
-        comm = t.get("commissioning_connection")
-        devices[dev_id] = Device(
-            id=dev_id,
-            vehicle=vehicle,
-            label=d.get("label", t["label"]),
-            type=d["type"],
-            pingable=d.get("pingable", t["pingable"]),
-            connection={**t["connection"], "ip": d["ip"]},
-            commissioning_connection={**comm, "ip": d["ip"]} if comm else None,
-            category=t.get("category"),
-        )
-
-    def build(vehicle, path, key, raw_node):
-        """Knoten aus YAML lesen: Alles ausser label/state/devices mit dict-Wert ist ein Unterknoten."""
-        path = (*path, key)
-        node = Node(
-            id="/".join(path),
-            label=raw_node.get("label", key),
-            state=raw_node.get("state"),
-        )
-        for name, d in (raw_node.get("devices") or {}).items():
-            add(vehicle, "/".join((*path, name)), d)
-            node.devices.append("/".join((*path, name)))
-        for k, v in raw_node.items():
-            if k not in _NODE_KEYS and isinstance(v, dict):
-                node.children.append(build(vehicle, path, k, v))
-        return node
-
-    central = build(None, (), "central", raw["central"])
-    central.label = raw["central"].get("label", "Zentrale")
-    vehicle_nodes = {vid: build(vid, (), vid, v) for vid, v in raw["vehicles"].items()}
-    return Project(
-        id=raw["id"],
-        name=raw["name"],
-        full_name=raw.get("full_name", ""),
-        credentials=raw.get("credentials", {}),
-        devices=devices,
-        live=raw.get("live", False),
-        central=central,
-        vehicle_nodes=vehicle_nodes,
-        vehicles={vid: v.get("label", vid) for vid, v in raw["vehicles"].items()},
-        control=raw["control"],
-        product=raw["product"],
-        vehicle_products={vid: v.get("product", raw["product"]) for vid, v in raw["vehicles"].items()},
-    )
+    return stored_project(project_id)

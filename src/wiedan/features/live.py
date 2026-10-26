@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
 
 from wiedan.core.model import Device, Node, Project
 from wiedan.core.ping import ping_devices
-from wiedan.ui.icons import icon, pick
+from wiedan.ui.icons import icon, node_icon_name, pick
 from wiedan.ui.spinner import spinner_icon
 
 DEVICE_ROLE = Qt.ItemDataRole.UserRole
@@ -106,7 +106,7 @@ class ProjectExplorer(QTreeWidget):
         return {
             device.id: device.connection["ip"]
             for device in self.active_devices
-            if device.pingable and (scope is None or device.id in scope)
+            if device.pingable and device.connection.get("ip") and (scope is None or device.id in scope)
         }
 
     def _can_ping(self, scope: set[str] | None = None) -> bool:
@@ -189,11 +189,11 @@ class ProjectExplorer(QTreeWidget):
         self.clear()
         self._items = {}
         self._groups = {}
+        self._nodes = {}
         if self._project is None:
             return
-        self._add_node(self, self._project.central, None)
-        for vid, node in self._project.vehicle_nodes.items():
-            self._add_node(self, node, vid)
+        for node in self._project.root_nodes:
+            self._add_node(self, node, node.vehicle)
         for node_id, group in self._groups.items():
             self._style_group(group)
             if not was_empty and node_id in expanded:
@@ -207,7 +207,7 @@ class ProjectExplorer(QTreeWidget):
         self._groups[node.id] = group
         self._nodes[node.id] = node
         for child in node.children:
-            self._add_node(group, child, vehicle_id)
+            self._add_node(group, child, child.vehicle)
         inactive = vehicle_id in self._inactive_vehicles_by_project.get(self._project.id, set())
         for device_id in node.devices:
             device = self._project.devices[device_id]
@@ -217,11 +217,9 @@ class ProjectExplorer(QTreeWidget):
             self._style_device_item(item, device, self._reachability.get(device.id), inactive)
 
     def _group_icon_name(self, group: QTreeWidgetItem, vehicle_id: str | None) -> str:
-        if group.parent() is not None:
-            return "project"
-        if vehicle_id is None:
-            return "central"
-        return pick(self._project.vehicle_products[vehicle_id], "vehicle")
+        return node_icon_name(group.data(0, NODE_ROLE), is_root=group.parent() is None,
+                              vehicle_product=self._project.vehicle_products.get(vehicle_id),
+                              is_vehicle=vehicle_id is not None)
 
     def _style_group(self, group: QTreeWidgetItem):
         """Gruppe grün, wenn alle pingbaren Geräte erreichbar; bei Fehler aufklappen bis zum Gerät."""
@@ -231,7 +229,7 @@ class ProjectExplorer(QTreeWidget):
         statuses = [
             self._reachability.get(device_id)
             for device_id in node.walk_devices()
-            if self._project.devices[device_id].pingable
+            if self._project.devices[device_id].pingable and self._project.devices[device_id].connection.get("ip")
         ]
         all_ok = not inactive and bool(statuses) and all(s is True for s in statuses)
         any_failed = not inactive and any(s is False for s in statuses)

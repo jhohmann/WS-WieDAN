@@ -18,6 +18,7 @@ from PySide6.QtWidgets import (
 )
 
 from wiedan.features.modbus_browser import ModbusBrowser
+from wiedan.features.hima_ringbuffer import HimaRingbuffer
 from wiedan.features.scalance_config import ScalanceConfigGenerator
 from wiedan.ui.tool_tile import ToolTile
 
@@ -30,6 +31,7 @@ class ToolSpec:
     icon: str  # Name einer SVG in ui/svg/
     category: str
     create: Callable[[], QWidget] | None  # None = vorbereiteter, noch nicht verfügbarer Eintrag
+    requires_project: bool = False
 
 
 TOOLS: tuple[ToolSpec, ...] = (
@@ -40,7 +42,11 @@ TOOLS: tuple[ToolSpec, ...] = (
     ToolSpec(
         "scalance-config-generator", "Scalance Config Generator",
         "Konfigurationen planen",
-        "comms", "Siemens", ScalanceConfigGenerator,
+        "comms", "Siemens", ScalanceConfigGenerator, requires_project=True,
+    ),
+    ToolSpec(
+        "hima-ringbuffer", "Ringbuffer", "1000 Samples auf 8 Kanälen auslesen",
+        "plc", "HIMA", HimaRingbuffer,
     ),
 )
 
@@ -55,6 +61,7 @@ class ToolBrowser(QScrollArea):
         self.setFrameShape(QFrame.Shape.NoFrame)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self._tiles: list[ToolTile] = []
+        self._tiles_by_id: dict[str, ToolTile] = {}
         self._buttons = QButtonGroup(self)
         content = QWidget()
         content.setObjectName("toolbrowsercontent")
@@ -86,6 +93,7 @@ class ToolBrowser(QScrollArea):
                 tile.activated.connect(self.tool_chosen)
                 self._buttons.addButton(tile)
                 self._tiles.append(tile)
+                self._tiles_by_id[spec.id] = tile
                 category_layout.addWidget(tile)
             heading.toggled.connect(
                 lambda expanded, button=heading, group=category_tools:
@@ -93,6 +101,16 @@ class ToolBrowser(QScrollArea):
             )
             layout.addWidget(category_tools)
         layout.addStretch(1)
+        self.set_project_available(False)
+
+    def set_project_available(self, available: bool):
+        for spec in TOOLS:
+            tile = self._tiles_by_id[spec.id]
+            enabled = spec.create is not None and (available or not spec.requires_project)
+            tile.setEnabled(enabled)
+            tile.setToolTip(spec.description if enabled else (
+                "Bitte ein Projekt auswählen" if spec.requires_project else "In Vorbereitung"
+            ))
 
     @staticmethod
     def _toggle_category(button: QToolButton, group: QWidget, expanded: bool):
@@ -108,22 +126,27 @@ class CommissioningArea(QStackedWidget):
     """Eine Instanz pro Tool, damit der Zustand (z. B. Verbindung) beim Wechseln erhalten bleibt."""
 
     message = Signal(str)
+    database_changed = Signal()
 
     def __init__(self):
         super().__init__()
         self._specs = {spec.id: spec for spec in TOOLS}
         self._pages: dict[str, QWidget] = {}
         self._project = None
+        self.before_database_edit = lambda: True
         hint = QLabel("Tool im Tool-Browser auswählen")
         hint.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.addWidget(hint)
 
     def open_tool(self, tool_id: str):
         spec = self._specs[tool_id]
-        if spec.create is None:
+        if spec.create is None or (spec.requires_project and self._project is None):
             return
         if tool_id not in self._pages:
             page = spec.create()
+            if hasattr(page, "database_changed"):
+                page.database_changed.connect(self.database_changed)
+                page.before_database_edit = lambda: self.before_database_edit()
             if self._project is not None and hasattr(page, "set_project"):
                 page.set_project(self._project)
             message = getattr(page, "message", None)
@@ -135,8 +158,12 @@ class CommissioningArea(QStackedWidget):
 
     def set_project(self, project):
         self._project = project
-        for page in self._pages.values():
-            if hasattr(page, "set_project"):
+        for tool_id, page in self._pages.items():
+            available = project is not None or not self._specs[tool_id].requires_project
+            page.setEnabled(available)
+            if not available and self.currentWidget() is page:
+                self.setCurrentIndex(0)
+            if project is not None and hasattr(page, "set_project"):
                 page.set_project(project)
 
     def can_leave_project(self) -> bool:

@@ -2,11 +2,7 @@
 
 import copy
 import os
-import shutil
-import tempfile
-import uuid
 from dataclasses import replace
-from pathlib import Path
 
 import pytest
 from PySide6.QtCore import Qt
@@ -31,17 +27,6 @@ from wiedan.core.scalance_config import (
     set_path,
 )
 from wiedan.features.scalance_config import ScalanceConfigGenerator, TemplateDialog
-
-
-@pytest.fixture
-def storage(monkeypatch):
-    root = Path(tempfile.gettempdir()).resolve()
-    directory = root / f"wiedan-scalance-test-{uuid.uuid4().hex}"
-    directory.mkdir()
-    monkeypatch.setenv("LOCALAPPDATA", str(directory))
-    yield directory
-    assert directory.resolve().parent == root and directory.name.startswith("wiedan-scalance-test-")
-    shutil.rmtree(directory)
 
 
 @pytest.fixture
@@ -212,7 +197,7 @@ def test_bulk_value_and_validation(page, monkeypatch):
     monkeypatch.setattr(QInputDialog, "getText", lambda *a, **kw: ("not-a-channel", True))
     page._bulk_value()
     for row in (0, 1):
-        assert page.table.item(row, 2).text() == "Entwurf"
+        assert page.table.item(row, 2).text() == "Abweichung · Entwurf"
         assert "ungültig" in page.table.item(row, channel).toolTip()
         assert page.table.item(row, channel).data(Qt.ItemDataRole.UserRole + 1)
     page.undo_stack.undo()

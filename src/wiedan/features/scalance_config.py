@@ -32,23 +32,27 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from wiedan.core.scalance_config import (
+from wiedan.core.working_configuration import (
     DEVICE_TYPES,
     PARAMETERS,
     W700,
     apply_template,
+    baseline,
     configuration_errors,
     configuration_status,
+    effective_entry,
     list_sets,
     load_set,
     new_set,
     parse_value,
     project_devices,
     read_set,
+    remove_redundant_overrides,
     save_set,
     set_path,
     user_directory,
 )
+from wiedan.features.master_data_editor import MasterDataEditor
 
 USER_ROLE = Qt.ItemDataRole.UserRole
 
@@ -188,9 +192,11 @@ class TableChange(QUndoCommand):
 
 
 class ScalanceConfigGenerator(QWidget):
+    database_changed = Signal()
+    before_database_edit = staticmethod(lambda: True)
     """Ein Gerät je Zeile; Vorgaben direkt in den Parameterzellen bearbeiten."""
 
-    DEFAULT_COLUMNS = frozenset({"role", "ssid", "channel"})
+    DEFAULT_COLUMNS = frozenset({"ip", "role", "ssid", "channel"})
 
     def __init__(self):
         super().__init__()
@@ -290,7 +296,7 @@ class ScalanceConfigGenerator(QWidget):
         layout.addWidget(self.table, 1)
         self.summary = QLabel()
         layout.addWidget(self.summary)
-        self.status = QLabel("Direkt bearbeiten · Strg+C / Strg+V für Excel · Entf löscht Vorgaben · Leere Zelle = keine Vorgabe")
+        self.status = QLabel("Arbeitskonfiguration · Fett = eigene Abweichung · Entf = Stammwert verwenden · Strg+C / Strg+V für Excel")
         self.status.setObjectName("scalanceStatus")
         self.status.setWordWrap(True)
         self.status.setTextFormat(Qt.TextFormat.PlainText)
@@ -311,7 +317,7 @@ class ScalanceConfigGenerator(QWidget):
         self._data = new_set(project)
         self._data["name"] = "Standard"
         self._saved = False
-        self.title.setText(f"Scalance · {project.name}")
+        self.title.setText(f"Scalance · Arbeitskonfiguration · {project.name}")
         names = list_sets(project.id)
         preferred = "Standard" if "Standard" in names else names[0] if len(names) == 1 else None
         if preferred:
@@ -340,7 +346,8 @@ class ScalanceConfigGenerator(QWidget):
             self.table.item(row, 0).setText(device.id)
             self.table.item(row, 0).setToolTip(f"{device.label}\n{device.id}\n{DEVICE_TYPES.get(device.type, device.type)}")
             self.table.item(row, 1).setText(device.connection.get("ip", ""))
-        used = set().union(*(entry["parameters"] for entry in self._data["devices"].values()))
+        used = set().union(*(entry["parameters"] for entry in self._data["devices"].values()),
+                           *(device.parameters for device in self._devices))
         for key, action in self._column_actions.items():
             visible = key in self.DEFAULT_COLUMNS or key in used
             action.setChecked(visible)
@@ -353,20 +360,28 @@ class ScalanceConfigGenerator(QWidget):
     def _render_values(self):
         self._loading = True
         for row, device in enumerate(self._devices):
-            entry = self._data["devices"].get(device.id)
+            entry = effective_entry(self._data, device)
             errors = configuration_errors(entry) if entry else []
-            values = entry["parameters"] if entry else {}
-            state = configuration_status(entry) if device.type == W700 else "Noch nicht unterstützt"
+            values = {**baseline(device), **(entry["parameters"] if entry else {})}
+            overrides = self._data["devices"].get(device.id, {}).get("parameters", {})
+            state = ("Abweichung · Entwurf" if errors else "Arbeitskonfiguration") if overrides else "Stammwerte"
+            if device.type != W700:
+                state = "Noch nicht unterstützt"
             self.table.item(row, 2).setText(state)
             self.table.item(row, 2).setToolTip("\n".join(errors) if device.type == W700 else "Switch-Konfiguration folgt später.")
             for key in self._keys:
                 item = self.table.item(row, self.column(key))
                 item.setText(str(values.get(key, "")))
+                font = item.font()
+                font.setBold(key in overrides)
+                item.setFont(font)
                 error = "\n".join(message for message in errors
                                   if message.startswith(PARAMETERS[key].label)
                                   or (key == "channel" and message.startswith("Kanal")))
                 item.setData(USER_ROLE + 1, error if device.type == W700 else "")
-                item.setToolTip(error or PARAMETERS[key].hint or "Leer = keine eigene Vorgabe")
+                item.setToolTip(error or f"Stammwert: {baseline(device).get(key, 'nicht hinterlegt')}\n"
+                                + ("Eigene Abweichung" if key in overrides else "Aus Stammdaten übernommen")
+                                + f"\n{PARAMETERS[key].hint}")
         self._loading = False
         self._refresh_summary()
         self._selection_changed()
@@ -387,11 +402,11 @@ class ScalanceConfigGenerator(QWidget):
         if self._data is None:
             return
         wireless = [d for d in self._devices if d.type == W700]
-        configured = [self._data["devices"][d.id] for d in wireless if d.id in self._data["devices"]]
+        configured = [entry for d in wireless if (entry := effective_entry(self._data, d)) is not None]
         drafts = sum(bool(configuration_errors(entry)) for entry in configured)
         self.summary.setText(f"{self._data['name']} · {'Ungespeichert · ' if self._dirty else ''}"
                              f"{len(wireless) - len(configured)} ohne Konfiguration · {drafts} Entwürfe · "
-                             f"{len(configured) - drafts} hinterlegt")
+                             f"{len(self._data['devices'])} Geräte mit eigenen Vorgaben")
 
     def _clean_changed(self, clean):
         self._dirty = not clean
@@ -416,9 +431,12 @@ class ScalanceConfigGenerator(QWidget):
         self.template_button.setEnabled(bool(self._selected_devices()))
 
     def _push(self, after, title):
+        remove_redundant_overrides(after, self._project)
         before = self._data["devices"]
         if before != after:
             self.undo_stack.push(TableChange(self, copy.deepcopy(before), after, title))
+        else:
+            self._render_values()
 
     def _apply_cells(self, updates, title):
         after = copy.deepcopy(self._data["devices"])
@@ -586,8 +604,28 @@ class ScalanceConfigGenerator(QWidget):
         self.undo_stack.setClean()
         self._refresh_sets()
         self._refresh_summary()
-        self._status("Konfiguration lokal gespeichert.")
+        self._status("Arbeitskonfiguration lokal gespeichert. Der Stammdatenstand bleibt unverändert.")
         return True
+
+    def _promote(self):
+        if not self._data["devices"]:
+            self._status("Keine eigenen Abweichungen zum Übernehmen vorhanden.")
+            return
+        if self._dirty and not self._save():
+            return
+        project, working = self._project, copy.deepcopy(self._data)
+        if not self.before_database_edit():
+            return
+        try:
+            changed = []
+            editor = MasterDataEditor(project.database_path, project.uid, working=working, parent=self)
+            editor.saved.connect(lambda: changed.append(True))
+            editor.exec()
+            editor.deleteLater()
+            if changed:
+                self.database_changed.emit()
+        except (OSError, ValueError) as exc:
+            self._status(str(exc), True)
 
     def _status(self, text, error=False):
         self.status.setText(text)

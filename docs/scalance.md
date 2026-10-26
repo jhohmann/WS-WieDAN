@@ -1,5 +1,10 @@
 # Scalance: Arbeiten in der Tabelle
 
+Projektgeräte und IP-Adressen kommen aus der gemeinsamen lokalen
+[Arbeitsdatenbank](sqlite.md). Projekte und ihre Struktur werden im
+[Projekteditor unter Einstellungen](engineering.md) bearbeitet. Die Konfigurationsentwürfe bleiben vorläufig lokale
+Arbeitsdaten in ihrer bisherigen Ablage; ihre spätere Zuordnung ist noch offen.
+
 Unter **Inbetriebnahme → Siemens → Scalance Config Generator** werden
 Gerätekonfigurationen ohne angeschlossene Hardware geplant. Jedes Projektgerät
 hat eine Zeile; die Parameter stehen in Spalten. Gerätezuordnung und Projekt-IP

@@ -9,7 +9,56 @@ Ein gemeinsamer Datenstamm, mehrere schlanke Tools, Verteilung als .exe an Kolle
 
 ## CURRENT CHRONOLOGICAL STEP
 
-Helles Theme durchgestaltet: graugrüne Flächen, Grüntöne aus dem Darkmode und vollständige Farben für Eingabefelder und Bedienelemente. Sichtprüfung durch Nutzer offen.
+HIMA-Auslesung vom Benutzer als funktionsfähig bestätigt. CSV-Export des
+vollständigen sortierten Datensatzes ergänzt: 1000 Zeilen, Triggerzyklus,
+Pufferadresse, Zeit und acht Kanäle; Semikolon und UTF-8 mit BOM.
+Speichern-Dialog mit Fehlerbehandlung und atomarem Schreiben. Keine Tests ausgeführt.
+
+HIMA-Timeout-Diagnose ergänzt: Antwort-Timeout separat einstellbar (1–30 s,
+Standard 5 s), Fehler mit Sample/ReadIndex, Register, Schreib-/Leseschritt,
+Funktionscode, Unit-ID und Übertragungsphase. Ursache des gemeldeten Timeouts
+beim Auslesen noch nicht bestätigt; keine Tests oder SPS-Verbindung ausgeführt.
+
+HIMA-Ringbuffer als projektunabhängiges Tool ergänzt: konfigurierbare
+Modbus-Schnittstelle, automatische Auslesung von 1000 Samples mit acht Kanälen
+und Zeit, Fortschritt/Abbruch und zyklische Sortierung mit 100 Posttriggerzyklen.
+Lesebelegung vorbelegt: Zeit 0, Kanäle 1–8, Triggerposition 9 (Werte ab 0),
+Wartezeit 50 ms. Reset manuell als Impuls 1 → 0 (vorläufig 50 ms Impulsdauer).
+ReadIndex auf Register 0 mit FC16, Reset auf Coil 0 mit FC05; kein Index-Rücklesen.
+Projektunabhängige Tools bleiben ohne ausgewähltes Projekt verfügbar;
+Details in `docs/hima-ringbuffer.md`. Syntax geprüft, keine Tests
+und keine SPS-Verbindung ausgeführt.
+
+Engineering-Einstiege in die Einstellungen verlegt; Modus und Menü im Hauptfenster
+entfernt. Projekteditor als separates Fenster mit eigener Projektauswahl,
+Gerätekatalog und Stammdateneditor als getrennte Dialoge. Gemeinsame Symbole für
+Live- und Projektbaum; allgemeine Nodes mit neuem Struktursymbol. Kategorieansicht
+bleibt umschaltbar und sortiert alphabetisch. Direkter Scalance-Menüeintrag zur
+Stammdatenübernahme entfernt. Keine Tests ausgeführt; statische Prüfung ohne Befund.
+
+Dokumentationsfelder ergänzt: Definition je Gerätetyp im Gerätekatalog (Text,
+Zahl, Ja/Nein), individuelle Werte im Projekteditor. Format 4 ergänzt Definitionen
+und Werte mit stabilen Feld-UUIDs. Migration mit Sicherung beim ersten Speichern.
+Strecken-Nullpunkt und allgemeine Einbauposition aus der Bearbeitung entfernt;
+Beginn/Ende RCoax in Metern ausschließlich bei ausdrücklich gewählter Rolle
+Access Point. Streckenmodellierung bleibt zurückgestellt. Keine Tests ausgeführt;
+Syntax und gezielte statische Prüfung ohne Befund, GUI-Laufzeitprüfung offen.
+
+Engineering / Planung ergänzt: Projekteditor mit Neuanlage, allgemeinen Nodes,
+Geräten aus dem Katalog, Eigenschaften, Umordnung und Kategorieansicht.
+Stammdatenänderungen werden direkt in SQLite gespeichert. Format 3 ergänzt
+relationale Kategorien; ältere Datenbanken werden erst beim Speichern mit
+vorheriger Sicherung migriert. UUIDs bleiben bestehen. Details: `docs/engineering.md`.
+Keine Tests ausgeführt; Syntax und gezielte statische Prüfung ohne Befund.
+GUI-Bedienung und Speichern/Migration sind noch nicht zur Laufzeit geprüft.
+Freigaben, Serviceabgleich und allgemeine Konfigurationsrevisionen bleiben spätere Schritte.
+Die folgenden älteren Notizen beschreiben teilweise überholte Zwischenstände.
+
+Stammdaten auf eine gemeinsame lokale SQLite-Datenbank umgestellt. Der ursprüngliche
+YAML-Bestand ist unter `archive/yaml-data-2026-10-18/` archiviert; die Anwendung liest
+ausschließlich SQLite. Details und Verteilung: `docs/sqlite.md`. Scalance-Entwürfe
+bleiben vorläufig separate lokale Arbeitsdaten. Die nachfolgenden älteren
+Funktionsnotizen dokumentieren den bisherigen Ausbau, keine aktuellen Testläufe.
 
 ---
 
@@ -75,7 +124,7 @@ Helles Theme durchgestaltet: graugrüne Flächen, Grüntöne aus dem Darkmode un
 **Plattform und Tooling**
 - Windows, GUI mit PySide6, Live-Plots mit pyqtgraph. Auslieferung als .exe (PyInstaller).
 - pyproject.toml, PyYAML, dev: pytest, ruff. Entwicklung in .venv: `pip install -e .[dev]`, `pytest`.
-- Keine Validierung der Stammdaten, kein Pydantic. Sie gelten als korrekt und unveränderlich.
+- Stammdatenbank wird vor der Verwendung auf Format, Integrität und Beziehungen geprüft; App-Zugriff nur lesend.
 - Dateiänderungen nur über edit/create, Shell nur zum Ausführen (außer ausdrücklich erlaubt).
 
 **Architektur**
@@ -87,7 +136,7 @@ Helles Theme durchgestaltet: graugrüne Flächen, Grüntöne aus dem Darkmode un
 
 **Oberfläche (entschieden)**
 - Aufbau nach VS-Code-Vorbild: Kopfzeile (aktives Projekt), Activity Bar (Modus), Seitenleiste (Navigator des Modus), Hauptfenster mit Tabs (parallel), Statusleiste (Jobs, Verbindungen).
-- Projekt ist immer Kontext; alle Aufnahmen und Meldungen haben Projektbezug. Nur der Projekteditor ändert Stammdaten, alle anderen Werkzeuge lesen nur.
+- Projekt ist immer Kontext; alle Aufnahmen und Meldungen haben Projektbezug. Stammdatenpflege gehört derzeit nicht zur Anwendung.
 - Modus Live: Seitenleiste = Projekt-Explorer (Baum aller erreichbaren Geräte, kleines Icon pro Gerät, Farbe = Erreichbarkeit). Doppelklick auf ein Gerät öffnet dessen Datenseite als Tab. Live nur möglich, wenn die Projektstammdaten es als realisiert kennzeichnen (Feld `live` auf Projektebene).
 - Modus Inbetriebnahme: Seitenleiste = Tool-Browser, Hauptfenster = gewähltes Tool.
 - Modus Plotter (zugleich Signal-Recorder, immer mit Projektbezug): Seitenleiste = Kanäle (Farbe, Kurzname, ein/ausblenden, Doppelklick = bearbeiten); Hauptfenster = Plot und Dateneditor als Tabs.
@@ -97,14 +146,14 @@ Helles Theme durchgestaltet: graugrüne Flächen, Grüntöne aus dem Darkmode un
 - Mechanismus zur Anmeldung von Modi/Werkzeugen bleibt offen (Modi sind aktuell in apps/main_window.py fest eingetragen).
 
 **Stammdaten**
-- `src/wiedan/data/` wird mitgepackt (read-only): `projects/<id>.yaml`, `library/device_types/<typ>.yaml`, `library/logging_sets/`.
-- Neues Projekt = bestehendes Projekt kopieren und anpassen (kein templates/-Ordner).
+- `src/wiedan/data/stammdaten.sqlite` enthält alle Projekte, Typen, Logging-Vorlagen und Bilder. Beim ersten Start wird eine lokale Kopie bereitgestellt; vorhandene Datenstände bleiben erhalten.
+- Datenstände werden als vollständige SQLite-Datei verteilt und lokal ausgewählt. Keine Einzelprojektdateien; keine YAML-Stammdatenpflege.
 - Hierarchie: `central` und `vehicles`; jedes Gerät gehört zur Zentrale oder zu genau einem Fahrzeug. Geräte-ID = `<fzg_xx|central>/<name>`.
 - Projekt-Gerät: Name (individuell) + `type` + `ip`; optional `label`, `pingable`.
 - Gerätetyp (Library): label, pingable, connection (Protokoll, Port, unit_id, credentials), optional commissioning_connection, datapoints (Register, Datentyp, Skalierung, Einheit, Intervall).
 - Gerätegruppen werden nicht gepflegt, sondern per `Project.find(type, vehicle, central)` abgefragt. Logging-Sets referenzieren Gerätetyp, keine Geräte-IDs.
 - Ein Gerät hat einen festen Kommunikationsweg; Wechsel = neues Gerät anlegen.
-- Zugangsdaten: projektspezifisch, Klartext im Projekt unter `credentials:`; Geräte verweisen per Name (z. B. `client`). Repo privat halten.
+- Zugangsdaten: projektspezifisch in der Tabelle `credentials`; Geräte verweisen per Name (z. B. `client`). Datenbank ist nicht verschlüsselt.
 
 **Fahrzeug-Geräte (je Fahrzeug)**
 - `inverter` (nidec_m700, IP x), `plc` (himatrix_f35, IP x-2), `client` (siemens_scalance_w700, IP x-1).
