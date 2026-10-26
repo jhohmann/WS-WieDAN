@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>DEBUG Ringbuffer V1 – Anleitung</title>
+  <style>
+    body { font-family: sans-serif; }
+    h1, h2, h3 { margin-top: 24px; }
+    td, th { padding: 6px; }
+  </style>
+</head>
+<body>
+<h1>DEBUG Ringbuffer V1</h1>
+<p>Dieses Werkzeug liest einen HIMA-Ringbuffer über Modbus TCP aus. Es befindet
+sich unter <b>Inbetriebnahme → HIMA → Ringbuffer</b> und benötigt kein ausgewähltes
+Projekt. Das Profil enthält die feste Adressbelegung für die zugehörige
+SPS-Schnittstelle.</p>
+
+<h2 id="inhalt">Inhaltsverzeichnis</h2>
+<ol>
+  <li><a href="#kurzstart">Kurzstart</a></li>
+  <li><a href="#modbus">Modbus-Schnittstelle parametrieren</a></li>
+  <li><a href="#baustein">Funktionsbaustein vorbereiten</a></li>
+  <li><a href="#auslesen">Verbinden und auslesen</a></li>
+  <li><a href="#ergebnis">Ergebnis und CSV-Export</a></li>
+  <li><a href="#reset">Reset und Abbruch</a></li>
+  <li><a href="#fehler">Fehler und Wartezeiten</a></li>
+</ol>
+
+<h2 id="kurzstart">1. Kurzstart</h2>
+<ol>
+  <li>Die SPS-Schnittstelle mit der <a href="#modbus">Profilbelegung</a> abgleichen.</li>
+  <li>Einen fertigen Ringbuffer in der SPS bereitstellen. Er muss während
+      der gesamten Auslesung unverändert bleiben.</li>
+  <li>IP-Adresse, Port und Unit-ID eingeben und <b>Verbinden</b> wählen.</li>
+  <li>Die <b>Wartezeit je Sample</b> passend zum SPS-Programm einstellen;
+      vorbelegt sind 50 ms.</li>
+  <li><b>Datensatz auslesen</b> wählen. Nach Abschluss zeigt die Tabelle alle
+      1000 Samples in der Reihenfolge relativ zum Trigger.</li>
+  <li>Mit <b>Zum Trigger</b> zur Auslösung springen und bei Bedarf
+      <b>CSV exportieren …</b> wählen.</li>
+</ol>
+
+<h2 id="modbus">2. Modbus-Schnittstelle parametrieren</h2>
+<p>Alle folgenden Adressen sind <b>0-basiert</b>. Das Werkzeug verwendet die
+Belegung aus dem Profil <b>DEBUG Ringbuffer V1</b>. Die Adressen werden beim
+Auslesen nicht einzeln eingegeben. Über <b>Adressbelegung anzeigen</b> lässt
+sich die geladene Belegung einsehen.</p>
+<table border="1" cellspacing="0" cellpadding="6">
+  <tr><th>Signal</th><th>Zugriff aus WieDAN</th><th>Adresse</th></tr>
+  <tr><td>ReadIndex</td><td>FC16 · Write Multiple Registers, ein Register</td><td>0</td></tr>
+  <tr><td>Reset</td><td>FC05 · Write Single Coil</td><td>0 (Coil)</td></tr>
+  <tr><td>Zeit</td><td>FC03 · Read Holding Registers</td><td>0</td></tr>
+  <tr><td>Kanal 1</td><td>FC03</td><td>1</td></tr>
+  <tr><td>Kanal 2</td><td>FC03</td><td>2</td></tr>
+  <tr><td>Kanal 3</td><td>FC03</td><td>3</td></tr>
+  <tr><td>Kanal 4</td><td>FC03</td><td>4</td></tr>
+  <tr><td>Kanal 5</td><td>FC03</td><td>5</td></tr>
+  <tr><td>Kanal 6</td><td>FC03</td><td>6</td></tr>
+  <tr><td>Kanal 7</td><td>FC03</td><td>7</td></tr>
+  <tr><td>Kanal 8</td><td>FC03</td><td>8</td></tr>
+  <tr><td>Triggerposition</td><td>FC03</td><td>9</td></tr>
+</table>
+<p>Alle Registerwerte sind 16 Bit breit. ReadIndex und Zeit verwenden beide
+Adresse 0, jedoch mit unterschiedlichen Zugriffsrichtungen. Die SPS-Zuordnung
+muss diese Schnittstelle abbilden. ReadIndex wird nur geschrieben; ein
+Index wird nicht zurückgelesen.</p>
+<h3>Abbildungen zur Modbus-Parametrierung</h3>
+<p>Die Screenshots und die Beschreibung der konkreten Einstellfelder werden
+noch ergänzt. Die Tabelle oben beschreibt die vom Werkzeug erwartete Belegung.</p>
+<!-- Screenshots in images/ ablegen und hier mit relativen img-src-Pfaden
+     sowie Bildunterschriften einbinden. Keine externen Bildquellen verwenden. -->
+
+<h2 id="baustein">3. Funktionsbaustein vorbereiten</h2>
+<p>Das Werkzeug erwartet einen Puffer mit <b>1000 Samples</b>, jeweils mit einem
+Zeitwert und acht Kanalwerten. ReadIndex und Triggerposition liegen zwischen
+0 und 999. Nach dem Schreiben von ReadIndex muss das SPS-Programm die Werte
+dieses Speicherplatzes an der Leseschnittstelle bereitstellen.</p>
+<p>Die Auswertung geht von <b>899 Samples vor dem Trigger</b>, dem Trigger-Sample
+und <b>100 Samples nach dem Trigger</b> aus. Der fertige Datensatz darf während
+der Übertragung nicht weiter beschrieben oder zurückgesetzt werden.</p>
+<p>Eine Modbus-Schreibbestätigung bedeutet noch nicht, dass das SPS-Programm
+den neuen ReadIndex verarbeitet hat. Dafür dient die Wartezeit je Sample.
+Eine separate Bereit- oder Index-Rückmeldung ist derzeit nicht vorgesehen.</p>
+<h3>Abbildungen zur Baustein-Parametrierung</h3>
+<p>Der Screenshot des Funktionsbausteins und die Erläuterungen seiner Anschlüsse
+und Parameter werden noch ergänzt.</p>
+<!-- Baustein-Screenshots ebenfalls unter images/ ablegen. -->
+
+<h2 id="auslesen">4. Verbinden und auslesen</h2>
+<p>Trage die IP-Adresse der SPS ein. Port <b>502</b> und Unit-ID <b>0</b> sind
+voreingestellt. Das <b>Antwort-Timeout</b> beträgt zunächst 5 Sekunden und ist
+vor dem Verbinden zwischen 1 und 30 Sekunden einstellbar. Zum Ändern der
+Verbindungsparameter zuerst die Verbindung trennen.</p>
+<p><b>Verbinden</b> baut die TCP-Verbindung auf. Ein erfolgreicher Aufbau
+bestätigt noch keine Modbus-Antwort der SPS.</p>
+<p><b>Datensatz auslesen</b> überträgt automatisch alle 1000 Samples. Pro Sample
+schreibt WieDAN ReadIndex mit FC16, wartet die eingestellte Zeit ab und liest
+anschließend die Werte mit FC03. Benachbarte Leseregister werden gemeinsam
+abgefragt. Der Fortschrittsbalken zeigt die bereits gelesenen Samples.</p>
+<p>Die Wartezeit je Sample ist unabhängig vom Antwort-Timeout. Mit 50 ms
+entfallen allein auf diese Wartezeiten insgesamt 50 Sekunden; hinzu kommen
+die Modbus-Übertragungen. Während einer Auslesung kann die Wartezeit nicht
+geändert werden.</p>
+<p>Nur eine vollständige Übertragung ersetzt das bisherige Ergebnis. Während
+einer erneuten Auslesung bleibt der letzte vollständige Datensatz sichtbar.</p>
+
+<h2 id="ergebnis">5. Ergebnis und CSV-Export</h2>
+<p>Die Tabelle beginnt 899 Zyklen vor dem Trigger. <b>0 · Trigger</b> markiert
+die Auslösung, danach folgen 100 Posttrigger-Samples. <b>Zum Trigger</b>
+springt direkt auf diese Zeile.</p>
+<p>Die Spalte <b>Pufferadresse</b> enthält den ursprünglichen Speicherplatz.
+Die zyklische Sortierung beginnt bei:</p>
+<pre>Start = (Triggerposition + 100 + 1) modulo 1000</pre>
+<p>Zeit und alle acht Kanäle bleiben beim Umsortieren zusammen. Die Werte
+werden unverändert als vorzeichenlose 16-Bit-Werte (UINT16) angezeigt.
+Zeitwerte werden weder skaliert noch nach ihrer Größe sortiert.</p>
+<p><b>CSV exportieren …</b> speichert den vollständigen angezeigten Datensatz
+am gewählten Speicherort. Die Datei enthält eine Kopfzeile und 1000 Datenzeilen
+mit Triggerzyklus, Pufferadresse, Zeit und Kanal 1–8 in derselben Reihenfolge
+wie die Tabelle. Der Triggerzyklus bleibt in der Datei numerisch (0).</p>
+<p>Trennzeichen ist ein Semikolon, die Kodierung UTF-8 mit BOM für Excel.
+Der Export ist auch nach Trennung der SPS möglich. Während eines laufenden
+Auftrags ist er deaktiviert.</p>
+
+<h2 id="reset">6. Reset und Abbruch</h2>
+<p><b>Abbrechen</b> beendet die Auslesung nach der laufenden Modbus-Anfrage und
+trennt die Verbindung. Teilübertragungen werden verworfen; ein bereits
+vollständig ausgelesener Datensatz bleibt erhalten.</p>
+<p><b>Reset (Impuls 1 → 0)</b> schreibt mit FC05 zunächst 1 auf Coil 0,
+wartet 50 ms und schreibt anschließend 0. Der Reset wird manuell ausgelöst.
+Auch beim Beenden der Anwendung wird das abschließende Schreiben von 0 noch
+versucht. Wird es nicht bestätigt, meldet WieDAN den unbestätigten Coil-Zustand.</p>
+<p>Die Rückmeldung bestätigt die Schreibaufträge, nicht die Ausführung des
+Resets im SPS-Programm. Reset und Verbindungstrennung löschen den angezeigten
+Datensatz nicht.</p>
+
+<h2 id="fehler">7. Fehler und Wartezeiten</h2>
+<ul>
+  <li><b>Timeout:</b> Die Meldung nennt Funktionscode, Unit-ID und die Phase
+      der Übertragung. IP, Port, Unit-ID und die Modbus-Parametrierung mit
+      der SPS abgleichen. Das Antwort-Timeout begrenzt einzelne
+      Socket-Wartevorgänge, nicht die Gesamtdauer der Auslesung.</li>
+  <li><b>Fehler an einem Sample:</b> Die Meldung nennt Sample, ReadIndex,
+      Register und den betroffenen Schreib- oder Leseschritt.</li>
+  <li><b>Triggerposition ungültig oder verändert:</b> Die Auslesung wird
+      verworfen. Einen fertigen, unveränderten Datensatz bereitstellen
+      und erneut auslesen.</li>
+  <li><b>Werte passen nicht zum ReadIndex:</b> Die Wartezeit je Sample und
+      die Verarbeitung im SPS-Programm prüfen. Eine unveränderte
+      Triggerposition allein bestätigt nicht die Aktualität aller Werte.</li>
+  <li><b>Reset-Coil nicht auf 0 bestätigt:</b> Den Coil-Zustand an der SPS
+      prüfen; der Reset-Impuls ist nicht vollständig bestätigt.</li>
+</ul>
+<p>Bei einem Übertragungsfehler wird die Verbindung getrennt. Es gibt keine
+automatischen Schreibwiederholungen. Einstellungen und ausgelesene Werte
+bleiben für die laufende Anwendungssitzung im Werkzeug erhalten. Für eine
+dauerhafte Ablage der Messwerte den CSV-Export verwenden.</p>
+<p><a href="#inhalt">Zurück zum Inhaltsverzeichnis</a></p>
+</body>
+</html>

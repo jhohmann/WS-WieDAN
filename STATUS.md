@@ -9,6 +9,16 @@ Ein gemeinsamer Datenstamm, mehrere schlanke Tools, Verteilung als .exe an Kolle
 
 ## CURRENT CHRONOLOGICAL STEP
 
+Zahlenfelder verwenden eigene kontrastreiche Hoch-/Runter-Pfeile für hellen
+und dunklen Stil sowie getrennte Schaltflächen rechts im Feld, unabhängig
+von nativen Windows-Pfeilen. Keine Tests oder GUI-Laufzeitprüfung ausgeführt.
+
+HIMA-Ringbuffer: Adressbelegung in das mitgelieferte Profil DEBUG Ringbuffer V1
+ausgelagert. Im Tool nur noch aufklappbare Adressübersicht; Wartezeit weiterhin
+einstellbar. Separate Offline-Hilfe mit Inhaltsverzeichnis und Suche ergänzt.
+Abschnitte für Modbus- und Baustein-Parametrierung vorbereitet; Screenshots und
+konkrete Einstellfeld-Erläuterungen fehlen noch. Keine Tests ausgeführt.
+
 HIMA-Auslesung vom Benutzer als funktionsfähig bestätigt. CSV-Export des
 vollständigen sortierten Datensatzes ergänzt: 1000 Zeilen, Triggerzyklus,
 Pufferadresse, Zeit und acht Kanäle; Semikolon und UTF-8 mit BOM.

@@ -1,5 +1,7 @@
 """Farbstile (hell, dunkel, pastell) und das daraus erzeugte Stylesheet."""
 
+from pathlib import Path
+
 from PySide6.QtGui import QColor, QPalette
 
 # Pastell färbt jeden Bereich anders: Hilfsmittel zum Debuggen des Layouts.
@@ -67,6 +69,10 @@ def palette(c: dict) -> QPalette:
 
 
 def stylesheet(c: dict) -> str:
+    arrow_style = "light" if QColor(c["input"]).lightness() > 127 else "dark"
+    svg_directory = Path(__file__).resolve().parent / "svg"
+    arrow_up = (svg_directory / f"spin-up-{arrow_style}.svg").as_posix()
+    arrow_down = (svg_directory / f"spin-down-{arrow_style}.svg").as_posix()
     return f"""
     QWidget {{ color: {c['text']}; font-size: 13px; }}
     QWidget:disabled {{ color: {c['muted']}; }}
@@ -87,6 +93,33 @@ def stylesheet(c: dict) -> str:
     QAbstractSpinBox QLineEdit, QComboBox QLineEdit {{
         background: transparent; border: none; padding: 0px;
     }}
+    QAbstractSpinBox {{ padding-right: 26px; }}
+    QAbstractSpinBox::up-button, QAbstractSpinBox::down-button {{
+        subcontrol-origin: border; width: 22px;
+        background: {c['tab']}; border: none;
+        border-left: 1px solid {c['border']};
+        margin-right: 2px;
+    }}
+    QAbstractSpinBox::up-button {{
+        subcontrol-position: top right; margin-top: 2px;
+        border-top-right-radius: 2px;
+    }}
+    QAbstractSpinBox::down-button {{
+        subcontrol-position: bottom right; margin-bottom: 2px;
+        border-bottom-right-radius: 2px;
+    }}
+    QAbstractSpinBox::up-button:hover, QAbstractSpinBox::down-button:hover {{
+        background: {c['hover']};
+    }}
+    QAbstractSpinBox::up-button:pressed, QAbstractSpinBox::down-button:pressed {{
+        background: {c['selection']};
+    }}
+    QAbstractSpinBox::up-button:disabled, QAbstractSpinBox::down-button:disabled,
+    QAbstractSpinBox::up-button:off, QAbstractSpinBox::down-button:off {{
+        background: {c['input']};
+    }}
+    QAbstractSpinBox::up-arrow {{ image: url("{arrow_up}"); width: 10px; height: 6px; }}
+    QAbstractSpinBox::down-arrow {{ image: url("{arrow_down}"); width: 10px; height: 6px; }}
     QComboBox QAbstractItemView {{
         background: {c['input']}; color: {c['text']}; border: 1px solid {c['border']};
         selection-background-color: {c['selection']}; selection-color: {c['text']};

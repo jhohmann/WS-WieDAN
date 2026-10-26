@@ -3,11 +3,26 @@
 Unter **Inbetriebnahme → HIMA → Ringbuffer**. Das Tool verwendet keine
 Stammdaten und benötigt kein ausgewähltes Projekt.
 
+Die Oberfläche verwendet das mitgelieferte Profil **DEBUG Ringbuffer V1**.
+Alle Modbus-Adressen sind in
+[`debug_v1.json`](../src/wiedan/data/ringbuffer/debug_v1.json) hinterlegt.
+**Adressbelegung anzeigen** blendet die feste Belegung zur Kontrolle ein;
+einzelne Adressen werden nicht mehr im Bedienbereich eingegeben.
+Die Wartezeit je Sample bleibt einstellbar.
+
+**Hilfe / Anleitung** öffnet ein separates, nicht modales Hilfefenster mit
+Inhaltsverzeichnis und Textsuche. Die
+[Offline-Anleitung](../src/wiedan/data/help/hima-ringbuffer.html) enthält
+Bedienablauf, Schnittstellenbelegung, Baustein-Voraussetzungen und Fehlerhilfe.
+Screenshots zur Modbus- und Baustein-Parametrierung stehen noch aus.
+Sie können unter `src/wiedan/data/help/images/` abgelegt und mit relativen
+Bildpfaden und Bildunterschriften in der HTML-Anleitung eingebunden werden.
+
 1. SPS-IP, Port (Standard 502) und Unit-ID (Standard 0) eingeben und verbinden.
    Das **Antwort-Timeout** ist auf 5 Sekunden voreingestellt und vor dem
    Verbinden zwischen 1 und 30 Sekunden einstellbar. Es ist unabhängig von
    der Wartezeit zwischen Schreiben und Lesen.
-2. Die **0-basierten Modbus-Adressen** sind vorbelegt: ReadIndex wird mit
+2. Das Profil legt die **0-basierten Modbus-Adressen** fest: ReadIndex wird mit
    **FC16 (Write Multiple Registers)** auf Register **0** geschrieben,
    Reset mit **FC05 (Write Single Coil)** auf Coil **0**.
    Gelesen werden Zeit auf Register 0, Kanal 1–8 auf Register 1–8 und

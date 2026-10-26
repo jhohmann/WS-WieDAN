@@ -1,6 +1,8 @@
 """HIMA-Ringbuffer: 1000 Samples, acht 16-Bit-Kanäle und 100 Posttriggerzyklen."""
 from collections.abc import Callable
 from dataclasses import dataclass
+from importlib.resources import files
+import json
 from threading import Event
 from time import sleep
 
@@ -64,6 +66,27 @@ class ReadConfig:
 
 class ReadCancelled(Exception):
     """Auslesung vom Benutzer abgebrochen; Teilwerte werden nicht übernommen."""
+
+
+@dataclass(frozen=True)
+class RingbufferProfile:
+    name: str
+    read_config: ReadConfig
+    reset_coil: int
+
+
+def load_debug_profile() -> RingbufferProfile:
+    resource = files("wiedan").joinpath("data", "ringbuffer", "debug_v1.json")
+    data = json.loads(resource.read_text(encoding="utf-8"))
+    config = ReadConfig(
+        data["address_register"], tuple(data["channel_registers"]),
+        data["time_register"], data["trigger_register"],
+        data["index_base"], data["settle_ms"],
+    )
+    config.validate()
+    if not 0 <= data["reset_coil"] <= 65535:
+        raise ValueError("Ungültige Reset-Coil-Adresse im Ringbuffer-Profil.")
+    return RingbufferProfile(data["name"], config, data["reset_coil"])
 
 
 def _read_blocks(addresses: tuple[int, ...]) -> list[tuple[int, int]]:

@@ -18,4 +18,4 @@ dev = ["pytest", "ruff"]
 where = ["src"]
 
 [tool.setuptools.package-data]
-wiedan = ["data/stammdaten.sqlite", "core/*.sql", "ui/svg/*.svg"]
+wiedan = ["data/stammdaten.sqlite", "data/ringbuffer/*.json", "data/help/*.html", "data/help/images/*", "core/*.sql", "ui/svg/*.svg"]

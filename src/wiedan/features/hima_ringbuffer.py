@@ -1,21 +1,24 @@
 """Projektunabhängiges HIMA-Werkzeug zum automatischen Auslesen eines Ringbuffers."""
 import csv
 import io
+from dataclasses import replace
+from pathlib import Path
 from threading import Event
 
 from PySide6.QtCore import (
     QAbstractTableModel, QIODevice, QModelIndex, QObject, QRunnable, QSaveFile,
-    Qt, QThreadPool, Signal, Slot,
+    Qt, QThreadPool, QUrl, Signal, Slot,
 )
+from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import (
-    QAbstractItemView, QApplication, QFileDialog, QGridLayout, QGroupBox, QHBoxLayout,
+    QAbstractItemView, QApplication, QDialog, QFileDialog, QGridLayout, QGroupBox, QHBoxLayout,
     QHeaderView, QLabel, QLineEdit, QProgressBar, QPushButton, QSpinBox, QTableView,
-    QVBoxLayout, QWidget,
+    QTextBrowser, QVBoxLayout, QWidget,
 )
 
 from wiedan.core.hima_ringbuffer import (
     CHANNEL_COUNT, RESET_PULSE_MS, SAMPLE_COUNT, TRIGGER_ROW, Dataset, ReadCancelled,
-    ReadConfig, pulse_reset, read_dataset,
+    load_debug_profile, pulse_reset, read_dataset,
 )
 from wiedan.core.modbus import ModbusError, ModbusTcpClient
 
@@ -98,11 +101,41 @@ def _spin(low, high, value=None):
     return widget
 
 
-def _address():
-    widget = _spin(-1, 65535)
-    widget.setSpecialValueText("Bitte angeben")
-    widget.setToolTip("Modbus-Adresse, 0-basiert (0–65535)")
-    return widget
+class _RingbufferHelp(QDialog):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.setWindowTitle("Hilfe · DEBUG Ringbuffer V1")
+        self.resize(950, 750)
+        self._browser = QTextBrowser()
+        source = Path(__file__).resolve().parents[1] / "data" / "help" / "hima-ringbuffer.html"
+        self._browser.setSource(QUrl.fromLocalFile(str(source)))
+        self._search = QLineEdit()
+        self._search.setPlaceholderText("In der Anleitung suchen …")
+        self._search.setClearButtonEnabled(True)
+        next_match = QPushButton("Weitersuchen")
+        next_match.setAutoDefault(False)
+        next_match.clicked.connect(self._find)
+        self._search.returnPressed.connect(self._find)
+        self._search_status = QLabel()
+        contents = QPushButton("Inhaltsverzeichnis")
+        contents.setAutoDefault(False)
+        contents.clicked.connect(lambda: self._browser.scrollToAnchor("inhalt"))
+        search_row = QHBoxLayout()
+        search_row.addWidget(contents)
+        search_row.addWidget(self._search, 1)
+        search_row.addWidget(next_match)
+        search_row.addWidget(self._search_status)
+        layout = QVBoxLayout(self)
+        layout.addLayout(search_row)
+        layout.addWidget(self._browser, 1)
+
+    def _find(self):
+        text = self._search.text().strip()
+        self._search_status.clear()
+        if text and not self._browser.find(text):
+            self._browser.moveCursor(QTextCursor.MoveOperation.Start)
+            if not self._browser.find(text):
+                self._search_status.setText("Kein Treffer")
 
 
 class HimaRingbuffer(QWidget):
@@ -114,6 +147,8 @@ class HimaRingbuffer(QWidget):
         self._task = None
         self._cancel = Event()
         self._disconnect_requested = False
+        self._profile = load_debug_profile()
+        self._help_dialog = None
 
         self._ip = QLineEdit()
         self._ip.setPlaceholderText("IP-Adresse der HIMA-SPS")
@@ -134,33 +169,40 @@ class HimaRingbuffer(QWidget):
             connection.addWidget(widget, 1 if widget is self._ip else 0)
         connection.addWidget(self._connect)
 
-        self._config_group = QGroupBox("SPS-Schnittstelle · Modbus-Adressen sind 0-basiert")
+        profile_row = QHBoxLayout()
+        profile_row.addWidget(QLabel(f"Profil: {self._profile.name}"))
+        profile_row.addStretch()
+        details = QPushButton("Adressbelegung anzeigen")
+        details.setCheckable(True)
+        profile_row.addWidget(details)
+        help_button = QPushButton("Hilfe / Anleitung")
+        help_button.clicked.connect(self._show_help)
+        profile_row.addWidget(help_button)
+
+        self._config_group = QGroupBox("Adressbelegung aus dem Profil · Modbus-Adressen sind 0-basiert")
         grid = QGridLayout(self._config_group)
-        self._read_address = _address()
-        self._read_address.setValue(0)
-        self._time = _address()
-        self._time.setValue(0)
-        self._trigger = _address()
-        self._trigger.setValue(9)
-        self._coil = _address()
-        self._coil.setValue(0)
-        self._channels = [_address() for _ in range(CHANNEL_COUNT)]
-        for number, widget in enumerate(self._channels, 1):
-            widget.setValue(number)
-        fields = [("ReadIndex schreiben (FC16)", self._read_address), ("Reset-Coil (FC05)", self._coil),
-                  ("Zeit lesen (FC03)", self._time), ("Triggerposition lesen (FC03)", self._trigger)]
-        fields.extend((f"Kanal {number} lesen (FC03)", widget)
-                      for number, widget in enumerate(self._channels, 1))
-        for position, (label, widget) in enumerate(fields):
+        config = self._profile.read_config
+        fields = [("ReadIndex schreiben (FC16)", config.address_register),
+                  ("Reset-Coil (FC05)", self._profile.reset_coil),
+                  ("Zeit lesen (FC03)", config.time_register),
+                  ("Triggerposition lesen (FC03)", config.trigger_register)]
+        fields.extend((f"Kanal {number} lesen (FC03)", address)
+                      for number, address in enumerate(config.channel_registers, 1))
+        for position, (label, address) in enumerate(fields):
             row, col = divmod(position, 2)
             grid.addWidget(QLabel(label), row, col * 2)
-            grid.addWidget(widget, row, col * 2 + 1)
-        self._settle = _spin(0, 60000, 50)
+            grid.addWidget(QLabel(str(address)), row, col * 2 + 1)
+        self._config_group.setVisible(False)
+        details.toggled.connect(self._config_group.setVisible)
+        details.toggled.connect(lambda shown: details.setText(
+            "Adressbelegung ausblenden" if shown else "Adressbelegung anzeigen"))
+        self._settle = _spin(0, 60000, config.settle_ms)
         self._settle.setSuffix(" ms")
         self._settle.setToolTip("Wartezeit zwischen bestätigtem Leseadresse-Schreiben und Lesen der Werte.")
-        grid.addWidget(QLabel("Triggerposition: 0–999"), 6, 0, 1, 2)
-        grid.addWidget(QLabel("Wartezeit je Sample"), 6, 2)
-        grid.addWidget(self._settle, 6, 3)
+        timing_row = QHBoxLayout()
+        timing_row.addWidget(QLabel("Wartezeit je Sample"))
+        timing_row.addWidget(self._settle)
+        timing_row.addStretch()
 
         self._read = QPushButton("Datensatz auslesen")
         self._read.clicked.connect(self._start_read)
@@ -208,7 +250,9 @@ class HimaRingbuffer(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(8, 4, 8, 8)
         layout.addLayout(connection)
+        layout.addLayout(profile_row)
         layout.addWidget(self._config_group)
+        layout.addLayout(timing_row)
         layout.addWidget(hint)
         layout.addLayout(actions)
         layout.addWidget(self._progress)
@@ -217,6 +261,13 @@ class HimaRingbuffer(QWidget):
         layout.addWidget(self._table, 1)
         QApplication.instance().aboutToQuit.connect(self.shutdown)
         self._update_ui()
+
+    def _show_help(self):
+        if self._help_dialog is None:
+            self._help_dialog = _RingbufferHelp(self)
+        self._help_dialog.show()
+        self._help_dialog.raise_()
+        self._help_dialog.activateWindow()
 
     def _notify(self, text):
         self._status.setText(text)
@@ -229,7 +280,7 @@ class HimaRingbuffer(QWidget):
             widget.setEnabled(not busy and not connected)
         self._connect.setText("Trennen" if connected else "Verbinden")
         self._connect.setEnabled(not busy)
-        self._config_group.setEnabled(not busy)
+        self._settle.setEnabled(not busy)
         for button in (self._read, self._reset_button):
             button.setEnabled(connected and not busy)
         self._abort.setEnabled(busy and self._task.action == "read" and not self._cancel.is_set())
@@ -268,9 +319,7 @@ class HimaRingbuffer(QWidget):
     def _start_read(self):
         if self._task is not None or self._client is None:
             return
-        config = ReadConfig(self._read_address.value(), tuple(widget.value() for widget in self._channels),
-                            self._time.value(), self._trigger.value(), 0,
-                            self._settle.value())
+        config = replace(self._profile.read_config, settle_ms=self._settle.value())
         try:
             config.validate()
         except ValueError as exc:
@@ -292,12 +341,8 @@ class HimaRingbuffer(QWidget):
     def _reset(self):
         if self._task is not None or self._client is None:
             return
-        if self._coil.value() < 0:
-            self._notify("Bitte die Modbus-Adresse des Reset-Coils angeben.")
-            self._coil.setFocus()
-            return
         self._notify("Reset-Impuls 1 → 0 wird geschrieben …")
-        self._start_task("reset", coil=self._coil.value())
+        self._start_task("reset", coil=self._profile.reset_coil)
 
     @Slot(object, object)
     def _finished(self, dataset, error):
